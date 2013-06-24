@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>Autocomplete</title>
+  <link rel="stylesheet" href="css/autocomplete.css" />
+  <style>
+    input {
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      appearance:none;
+      padding:10px;
+      font-size:16px;
+      font-family:"Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      border:1px solid #ddd;
+      width:300px;
+    }
+    .results {
+      position:absolute;
+      top:0;
+      left:500px;
+    }
+  </style>
+</head>
+<body>
+  <input id="autocomplete-0" type="text" name="autocomplete-0" />
+  <div class="results"></div>
+  <p>(try searching for "ca" or "wren" or "starling")</p>
+
+  <script src="lib/jquery-2.0.2.js"></script>
+  <script src="src/tiny-autocomplete-0.3.js"></script>
+
+  <script>
+    $('#autocomplete-0').tinyAutocomplete({
+      url: 'http://autocomplete.hal.se:8000/birds/',
+      grouped: true,
+      lastItemTemplate: '<li class="autocomplete-item autocomplete-item-last">Show all results for "{{title}}"</li>',
+      onSelect: function(el, val) {
+        if(val == null) {
+          $('.results').html('All results for "' + $(this).val() + '"" would go here');
+        }
+        else {
+          $(this).val( val.title );
+          $('.results').html('<h1>' + val.title + '</h1>');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

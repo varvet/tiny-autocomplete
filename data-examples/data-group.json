@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Larks",
+    "data": [
+      {"id":1, "title": "Clapper Lark", "url":"http://autocomplete.hal.se/larks/1"},
+      {"id":2, "title": "Spike-heeled Lark", "url":"http://autocomplete.hal.se/larks/2"},
+      {"id":3, "title": "Greater Hoopoe-lark", "url":"http://autocomplete.hal.se/larks/3"},
+      {"id":4, "title": "Calandra Lark", "url":"http://autocomplete.hal.se/larks/4"},
+      {"id":5, "title": "Woodlark", "url":"http://autocomplete.hal.se/larks/5"},
+      {"id":6, "title": "Skylark", "url":"http://autocomplete.hal.se/larks/6"},
+      {"id":7, "title": "Horned Lark", "url":"http://autocomplete.hal.se/larks/7"},
+      {"id":8, "title": "Crested Lark", "url":"http://autocomplete.hal.se/larks/8"}
+    ]
+  },
+  {
+    "title": "Wrens",
+    "template": "<li class='autocomplete-item'>{{title}}<br />(sound: {{sound}})</li>",
+    "data": [
+      {"id":1, "title":"Cactus Wren", "sound":"warbling"},
+      {"id":2, "title":"Rock Wren", "sound":"shouting"},
+      {"id":3, "title":"Sedge Wren", "sound":"screaming"},
+      {"id":4, "title":"Carolina Wren", "sound":"tweeting"},
+      {"id":5, "title":"Bewick's Wren", "sound":"warbling"},
+      {"id":6, "title":"House Wren", "sound":"shouting"},
+      {"id":7, "title":"Winter Wren", "sound":"screaming"},
+      {"id":8, "title":"Canyon Wren", "sound":"tweeting"},
+      {"id":9, "title":"Black-capped Donacobius", "sound":"warbling"}
+    ]
+  }
+]
