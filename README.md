@@ -60,6 +60,20 @@ $('.autocomplete').tinyAutocomplete({ minChars:3 });
 Minimum number of characters user has to type before autocomplete kicks in. Defaults to `2`.
 
 
+#### keyboardDelay:
+```javascript
+$('.autocomplete').tinyAutocomplete({ keyboardDelay:400 });
+```
+The delay between user releasing the key and search being performed. Set this to avoid firing lots of requests while the user is typing. Defaults to `200`
+
+
+#### timeLimit:
+```javascript
+$('.autocomplete').tinyAutocomplete({ timeLimit:1000 });
+```
+Maximum amount of searches allowed in a given time frame. If a search fires too soon, it will be queued up and fire again when it's allowed to do so.
+
+
 #### queryProperty:
 ```javascript
 $('.autocomplete').tinyAutocomplete({ queryProperty:'term' });

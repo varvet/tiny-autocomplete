@@ -1,6 +1,10 @@
 html, body {
   padding:0;
   margin:0;
+  font-family:"Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+h1 {
+  font-weight:300;  
 }
 input {
   -webkit-appearance:none;
@@ -14,9 +18,9 @@ input {
   font-family:"Helvetica Neue", "Helvetica", "Arial", sans-serif;
   border:1px solid #ddd;
   width:100%;
+  margin-top:20px;
 }
 .results {
-  margin-top:200px;
   width:100%;
-  min-height:400px;
+  min-height:600px;
 }

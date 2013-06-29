@@ -8,11 +8,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
 <body>
+  <h1>Tiny-autocomplete demo (grouped)</h1>
   <input id="autocomplete-0" type="text" name="autocomplete-0" />
   <div class="results"></div>
-  <p>(try searching for "ca" or "wren" or "starling")</p>
 
-  <script src="lib/jquery-2.0.2.js"></script>
+  <script src="lib/zepto.js"></script>
   <script src="src/tiny-autocomplete-0.3.js"></script>
 
   <script>
@@ -22,7 +22,7 @@
       lastItemTemplate: '<li class="autocomplete-item autocomplete-item-last">Show all results for "{{title}}"</li>',
       onSelect: function(el, val) {
         if(val == null) {
-          $('.results').html('All results for "' + $(this).val() + '"" would go here');
+          $('.results').html('All results for "' + $(this).val() + '" would go here');
         }
         else {
           $(this).val( val.title );

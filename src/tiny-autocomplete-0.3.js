@@ -9,13 +9,17 @@
 (function(window, $) {
   var TinyAutocomplete = function(el, options){
     this.field = $(el);
-    this.el = null;
-    this.json = null;
-    this.items = [];
-    this.selectedItem = null;
-    this.list = $('<ul class="autocomplete-list" />');
-    this.lastSearch = null;
-    this.options = options;
+
+    var that = this; // This is just to minify better
+    that.el = null;
+    that.json = null;
+    that.items = [];
+    that.selectedItem = null;
+    that.list = $('<ul class="autocomplete-list" />');
+    that.lastSearch = null;
+    that.searchTimeout = null;
+    that.searchTimeLimit = null;
+    that.options = options;
   };
 
   TinyAutocomplete.prototype = {
@@ -25,6 +29,10 @@
       grouped: false,
       queryProperty: 'q',
       method: 'get',
+      scrollOnFocus: 'auto',
+      maxItems: 100,
+      timeLimit: null,
+      keyboardDelay: 200,
       lastItemTemplate: null,
       groupContentName: '.autocomplete-items',
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
@@ -37,6 +45,7 @@
      */
     init: function() {
       this.settings = $.extend({}, this.defaults, this.options);
+      this.setupSettings();
       this.setupMarkup();
       this.setupEvents();
 
@@ -56,6 +65,17 @@
     },
 
     /**
+     * Tweak settings a bit, since we don't have any private functions
+     * defined at constructor time.
+     * @return {null}
+     */
+    setupSettings: function() {
+      if(this.settings.scrollOnFocus == 'auto') {
+        this.settings.scrollOnFocus = this.autoScrollOnFocus();
+      }
+    },
+
+    /**
      * Register initial mousedown callback
      * @return {null}
      */
@@ -63,6 +83,17 @@
       this.el.on('keyup', '.autocomplete-field', $.proxy(this.onKeyUp, this));
       this.el.on('keydown', '.autocomplete-field', $.proxy(this.onKeyDown, this));
       this.el.on('click', '.autocomplete-item', $.proxy(this.onClickItem, this));
+
+      // Scroll to field if we're on a small device, we need that
+      // screen real estate!
+      if(this.settings.scrollOnFocus) {
+        this.field.on('focus', function() {
+          var h = $(this).offset().top;
+          setTimeout(function(){
+            window.scrollTo(0, h);
+          }, 0);
+        });
+      }
     },
 
     /**
@@ -73,6 +104,26 @@
       this.field.addClass('autocomplete-field');
       this.field.wrap('<div class="autocomplete" />');
       this.el = this.field.parent();
+    },
+
+    /**
+     * Final gateway before the search fires: are we allowed to send,
+     * or was the last search too recent? If it was, we delay this
+     * search until we're allowed to do it again.
+     * @param  {string} val Value to search for
+     * @return {null}
+     */
+    limitedRequest: function(val) {
+      if(new Date().getTime() > this.searchTimeLimit) {
+        this.request(val);
+      }
+      else {
+        var that = this;
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = setTimeout(function() {
+          that.request(val);
+        }, this.searchTimeLimit - new Date().getTime());
+      }
     },
 
     /**
@@ -90,6 +141,10 @@
         data: data,
         success: $.proxy(this.onReceiveData, this)
       });
+
+      if(this.settings.timeLimit) {
+        this.searchTimeLimit = new Date().getTime() + this.settings.timeLimit;
+      }
     },
 
     /**
@@ -98,6 +153,9 @@
      * @return {object}   jQuery object
      */
     itemAt: function(i) {
+      if(i == null) {
+        return $();
+      }
       return $('.autocomplete-item').eq(i);
     },
 
@@ -194,9 +252,9 @@
      */
     renderItemsInGroups: function() {
       var v = this.field.val();
-      for(var i in this.json) {
+      for(var i=0;i<this.json.length;i++) {
         var group = this.el.find( this.settings.groupContentName ).eq(i);
-        for(var j in this.json[i].data) {
+        for(var j=0;j<this.json[i].data.length && j<this.settings.maxItems;j++) {
           var jsonData = $.extend({}, this.json[i].data[j]);
           // Strongify hits
           if(this.settings.markAsBold) {
@@ -215,7 +273,7 @@
       this.list.remove();
       this.list = $('<ul class="autocomplete-list" />');
       var v = this.field.val();
-      for(var i in this.json) {
+      for(var i=0;i<this.json.length && i<this.settings.maxItems;i++) {
         var jsonData = $.extend({}, this.json[i]);
         // Strongify hits
         if(this.settings.markAsBold) {
@@ -276,6 +334,18 @@
     },
 
     /**
+     * Check whether this device should scroll to set focus. This is
+     * a very stupid function right now, going for touch (which is
+     * obviously bad for many reasons) and it should be improved later
+     * on. For now, you can override the scrollOnFocus setting instead
+     * if you want more intelligence to it.
+     * @return {boolean} Whether or not to scroll to field on focus
+     */
+    autoScrollOnFocus: function() {
+      return !!('ontouchstart' in window);
+    },
+
+    /**
      * Data received from server, determine what to do with it and
      * render everything.
      * @param  {object} data JSON from server
@@ -308,14 +378,34 @@
     },
 
     /**
-     * Keyup handler that checks whether or not to fire a request to
-     * server.
+     * Keyup handler that sets up a delayed check if the field value is
+     * new. If the keyboardDelay option isn't set, it does the check
+     * immediately.
      * @param  {object} e Normalized jQuery event object
      * @return {null}
      */
     onKeyUp: function(e) {
+      if(this.settings.keyboardDelay) {
+        var that = this;
+        clearTimeout(this.keyboardTimeout);
+        this.keyboardTimeout = setTimeout(function() {
+          that.checkFieldValue();
+        }, this.settings.keyboardDelay);
+      }
+      else {
+        checkFieldValue();
+      }
+    },
+
+    /**
+     * Check whether the field value is the same as last time and
+     * satisfies minimum character limit. If yes, the final check is
+     * whether the timeLimit option is set.
+     * @return {null}
+     */
+    checkFieldValue: function() {
       if(this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
-        this.request( this.field.val() );
+        this.limitedRequest( this.field.val() );
       }
       if(this.field.val() == '') {
         this.closeList();
