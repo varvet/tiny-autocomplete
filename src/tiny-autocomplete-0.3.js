@@ -8,9 +8,8 @@
  */
 (function(window, $) {
   var TinyAutocomplete = function(el, options){
-    this.field = $(el);
-
     var that = this; // This is just to minify better
+    this.field = $(el);
     that.el = null;
     that.json = null;
     that.items = [];
@@ -311,8 +310,10 @@
     getItemsFromGroups: function() {
       var r = [];
       for(var i in this.json) {
-        for(var j in this.json[i].data) {
-          r.push(this.json[i].data[j]);
+        for(var j=0;j<this.json[i].data.length;j++) {
+          if(j < this.settings.maxItems) {
+            r.push(this.json[i].data[j]);
+          }
         }
       }
 
