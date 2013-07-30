@@ -1,0 +1,115 @@
+<html>
+<head>
+  <title>Autocomplete</title>
+  <link rel="stylesheet" href="css/autocomplete.css" />
+  <link rel="stylesheet" href="css/autocomplete-demos.css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+  <h1>Tiny-autocomplete demo (local, grouped)</h1>
+  <input id="autocomplete-0" type="text" name="autocomplete-0" />
+  <div class="results"></div>
+
+  <script src="lib/zepto.js"></script>
+  <script src="src/tiny-autocomplete-0.3.js"></script>
+
+  <script>
+    var birds = [
+      {
+        "title": "Larks",
+        "data": [
+          {"id":1, "title": "Clapper Lark", "url":"http://autocomplete.hal.se/larks/1"},
+          {"id":2, "title": "Spike-heeled Lark", "url":"http://autocomplete.hal.se/larks/2"},
+          {"id":3, "title": "Greater Hoopoe-lark", "url":"http://autocomplete.hal.se/larks/3"},
+          {"id":4, "title": "Calandra Lark", "url":"http://autocomplete.hal.se/larks/4"},
+          {"id":5, "title": "Woodlark", "url":"http://autocomplete.hal.se/larks/5"},
+          {"id":6, "title": "Skylark", "url":"http://autocomplete.hal.se/larks/6"},
+          {"id":7, "title": "Horned Lark", "url":"http://autocomplete.hal.se/larks/7"},
+          {"id":8, "title": "Crested Lark", "url":"http://autocomplete.hal.se/larks/8"}
+        ]
+      },
+      {
+        "title": "Wrens",
+        "template": "<li class='autocomplete-item'>{{title}}<br />(sound: {{sound}})</li>",
+        "data": [
+          {"id":1, "title":"Cactus Wren", "sound":"warbling"},
+          {"id":2, "title":"Rock Wren", "sound":"shouting"},
+          {"id":3, "title":"Sedge Wren", "sound":"screaming"},
+          {"id":4, "title":"Carolina Wren", "sound":"tweeting"},
+          {"id":5, "title":"Bewick's Wren", "sound":"warbling"},
+          {"id":6, "title":"House Wren", "sound":"shouting"},
+          {"id":7, "title":"Winter Wren", "sound":"screaming"},
+          {"id":8, "title":"Canyon Wren", "sound":"tweeting"},
+          {"id":9, "title":"Black-capped Donacobius", "sound":"warbling"}
+        ]
+      },
+      {
+        "title": "Starlings",
+        "template": "<li class='autocomplete-item' style='color:{{color}}'>{{title}}</li>",
+        "data": [
+          {"id":1, "title":"Asian Glossy Starling", "color":"#888888"},
+          {"id":2, "title":"Golden Myna", "color":"#118888"},
+          {"id":3, "title":"Hill Myna", "color":"#888811"},
+          {"id":4, "title":"Bali Myna", "color":"#881188"},
+          {"id":5, "title":"Superb Starling", "color":"#111188"},
+          {"id":6, "title":"Common Myna", "color":"#881111"},
+          {"id":7, "title":"Chestnut-cheeked Starling", "color":"#118811"},
+          {"id":8, "title":"Common Starling", "color":"#888811"},
+          {"id":9, "title":"Wattled Starling", "color":"#881188"},
+          {"id":10, "title":"Rosy Starling", "color":"#118888"},
+          {"id":11, "title":"Tristram's Starling", "color":"#111188"},
+          {"id":12, "title":"Cape Starling", "color":"#888811"},
+          {"id":13, "title":"Yellow-billed Oxpecker", "color":"#118888"}
+        ]
+      },
+      {
+        "title": "Thrushes",
+        "data": [
+          {"id":1, "title":"Eastern Bluebird"},
+          {"id":2, "title":"Mountain Bluebird"},
+          {"id":3, "title":"Orange-headed Thrush"},
+          {"id":4, "title":"Hermit Thrush"},
+          {"id":5, "title":"Blue Whistling-thrush"},
+          {"id":6, "title":"Wood Thrush"},
+          {"id":7, "title":"Ring Ouzel"},
+          {"id":8, "title":"Japanese Thrush"},
+          {"id":9, "title":"Mistle Thrush"},
+          {"id":10, "title":"Common Blackbird"},
+          {"id":11, "title":"Song Thrush"},
+          {"id":12, "title":"Fieldfare"},
+          {"id":13, "title":"Red-legged Thrush"},
+          {"id":14, "title":"Austral Thrush"},
+          {"id":15, "title":"American Robin"},
+          {"id":16, "title":"White-browed Shortwing"},
+          {"id":17, "title":"Green Cochoa"},
+          {"id":18, "title":"Red-throated Alethe"},
+          {"id":19, "title":"Aztec Thrush"},
+          {"id":20, "title":"Clay-colored Robin"},
+          {"id":21, "title":"Veery"}
+        ]
+      }
+    ];
+  </script>
+
+  <script>
+    $('#autocomplete-0').tinyAutocomplete({
+      data: birds,
+      grouped: true,
+      maxItems: 3,
+      keyboardDelay: null,
+      lastItemTemplate: '<li class="autocomplete-item autocomplete-item-last">Show all results for "{{title}}"</li>',
+      onSelect: function(el, val) {
+        if(val == null) {
+          $('.results').html('All results for "' + $(this).val() + '" would go here');
+        }
+        else {
+          $(this).val( val.title );
+          $('.results').html('<h1>' + val.title + '</h1>');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -49,3 +49,11 @@
   text-align:center;
   padding:10px;
 }
+
+@media screen and (max-height:480px) and (max-width:480px) {
+  /* a blunt check for mobile screens: they need bigger hit targets */
+  .autocomplete .autocomplete-item {
+    padding-top:12px;
+    padding-bottom:12px;
+  }
+}

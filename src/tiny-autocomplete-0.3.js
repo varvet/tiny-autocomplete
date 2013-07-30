@@ -70,7 +70,22 @@
      */
     setupSettings: function() {
       if(this.settings.scrollOnFocus == 'auto') {
-        this.settings.scrollOnFocus = this.autoScrollOnFocus();
+        this.settings.scrollOnFocus = this.isTouchDevice();
+      }
+
+      // We might be on a mobile device and have little in the way of
+      // vertical real estate to work with. Cap it! This check needs a
+      // bit more intelligence to it.
+      if($(window).height() < 500) {
+        this.settings.maxItems = Math.min( this.settings.maxItems, 3 );
+      }
+
+      // Using local data or remote url?
+      if(this.settings.data) {
+        this.request = this.localRequest;
+      }
+      else {
+        this.request = this.remoteRequest;
       }
     },
 
@@ -130,7 +145,7 @@
      * @param  {string} val Value to search for
      * @return {null}
      */
-    request: function(val) {
+    remoteRequest: function(val) {
       var data = {};
       data[this.settings.queryProperty] = val;
       $.ajax({
@@ -144,6 +159,75 @@
       if(this.settings.timeLimit) {
         this.searchTimeLimit = new Date().getTime() + this.settings.timeLimit;
       }
+    },
+
+    /**
+     * Match request in local data instead of remote url
+     * @param  {string} val Value to search for
+     * @return {null}
+     */
+    localRequest: function(val) {
+      var r;
+      if(this.settings.grouped) {
+        this.onReceiveData( this.matchLocalPatternGrouped(val) );
+      }
+      else {
+        this.onReceiveData( this.matchLocalPatternFlat(val) );
+      }
+    },
+
+    /**
+     * Match the data in a flat array and return the objects where a
+     * hit was found.
+     * @param  {string} val Value to search for
+     * @return {array}      Array of hits
+     */
+    matchLocalPatternFlat: function(val) {
+      return this.matchArray( val, this.settings.data );
+    },
+
+    /**
+     * Match the data in a grouped array and return the objects where a
+     * hit was found, in the same manner
+     * @param  {string} val Value to search for
+     * @return {array}      Array of hits
+     */
+    matchLocalPatternGrouped: function(val) {
+      var r = $.extend(true, [], this.settings.data);
+
+      for(var i=0;i<r.length;i++) {
+        var a = this.matchArray(val, r[i].data);
+        if(a.length == 0) {
+          r.splice(i, 1);
+          i--;
+        }
+        else {
+          r[i].data = a;
+        }
+      }
+
+      return r;
+    },
+
+    /**
+     * Return an array of matched values from a source array
+     * @param  {string} val String to search for
+     * @param  {array} arr  Array to search in
+     * @return {array}      Matched array
+     */
+    matchArray: function(val, arr) {
+      var r = [];
+      for(var i=0;i<arr.length;i++) {
+        for(var j in arr[i]) {
+          if( (arr[i][j].toLowerCase && arr[i][j].toLowerCase().indexOf( val.toLowerCase() ) > -1) ||
+              (arr[i][j] == val) ) {
+            r.push(arr[i]);
+            break;
+          }
+        }
+      }
+
+      return r;
     },
 
     /**
@@ -335,14 +419,13 @@
     },
 
     /**
-     * Check whether this device should scroll to set focus. This is
-     * a very stupid function right now, going for touch (which is
-     * obviously bad for many reasons) and it should be improved later
-     * on. For now, you can override the scrollOnFocus setting instead
-     * if you want more intelligence to it.
-     * @return {boolean} Whether or not to scroll to field on focus
+     * A naive implementation of touch detection. In this day and age
+     * with Microsoft Surfaces and whatnot, this should probably be
+     * replaced with something more intelligent. But let's do that when
+     * we find the time.
+     * @return {boolean} Whether or not this is a touch device
      */
-    autoScrollOnFocus: function() {
+    isTouchDevice: function() {
       return !!('ontouchstart' in window);
     },
 
@@ -394,7 +477,7 @@
         }, this.settings.keyboardDelay);
       }
       else {
-        checkFieldValue();
+        this.checkFieldValue();
       }
     },
 
