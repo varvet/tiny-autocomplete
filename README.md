@@ -27,7 +27,7 @@ Note: while you can use Tiny Autocomplete with a local data source, the pattern 
 [Grouped search with remote data]
 
 ## Installation
-Just include tiny-autocomplete-0.x.js (development) or tiny-autocomplete-0.x-min.js (production) after Zepto or jQuery. You're good to go!
+Just include tiny-autocomplete-0.x.js (development) or tiny-autocomplete-0.x-min.js (production) after Zepto or jQuery. Include tiny-autocomplete.css and you're good to go!
 
 ## Usage
 ### Initialize an autocomplete field
