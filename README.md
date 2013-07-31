@@ -1,9 +1,9 @@
 # Tiny Autocomplete
-A small and snappy (less than 2k minified+gzipped!) JavaScript autocomplete plugin for Zepto and jQuery.
+A small and snappy (2k minified+gzipped!) JavaScript autocomplete plugin for Zepto and jQuery.
 
 ## Why?
 Because it seems the only great autocomplete plugin out there is the jQuery UI one. It's a lovely plugin, both good-looking and robust, but it also requires you to pull in >100k of JavaScript and some 20k of CSS which makes it a non-starter for most projects, unless you're already using the jQuery UI components. And it doesn't support mobile or tablets! So the aim of Tiny Autocomplete is to make a plugin that's
-* Small
+* Small footprint
 * Fast
 * Compatible with both Zepto and jQuery
 * Working on tablets and mobile devices
