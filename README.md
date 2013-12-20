@@ -172,7 +172,11 @@ $.tinyAutocomplete.defaults.method = 'post';
 ```
 
 ### Change settings at runtime
-Yes, you can do this! But some things are computed at instantiation, such as maxItems.
+Easiest way is to just call
+```javascript
+$('.autocomplete').tinyAutocomplete({ settings... });
+```
+TinyAutocomplete won't instantiate again, it will just change the settings on the object that's already there. If you want to, you can access the settings object on the element itself - it's in el.tinyAutocomplete.settings.
 
 ## License
 [MIT]

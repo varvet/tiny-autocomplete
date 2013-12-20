@@ -558,6 +558,13 @@
 
   $.fn.tinyAutocomplete = function(settings) {
     return this.each(function() {
+      if(this.tinyAutocomplete) {
+        // Prevent TinyAutocomplete from creating a new object. Instead,
+        // just update the settings object
+        $.extend(this.tinyAutocomplete.settings, settings);
+        return this;
+      }
+
       var d = new TinyAutocomplete(this, settings).init();
       this.tinyAutocomplete = {settings: d.settings};
     });
