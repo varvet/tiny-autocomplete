@@ -298,15 +298,23 @@
     },
 
     /**
-     * Iterate through data, adding <strong> tags for every hit
+     * Iterate through data, adding <strong> tags for every hit.
+     * Splits strings into words using whitespace and matches each
+     * word separately.
      * @param  {object} v   Data to operate on
      * @param  {string} str String to search for
      * @return {object}     Processed data object
      */
     markHitText: function(v, str) {
+      var words = str.split(' ');
       for(var i in v) {
         if(typeof(v[i]) == 'string' && i != 'template') {
-          v[i] = v[i].replace( new RegExp("(" + str + ")" , 'gi'), "<strong>$1</strong>" );          
+          for(var j=0;j<words.length;j++) {
+            var word = words[j].trim().replace(/[^a-z0-9]/gi,''); // Remove non-alphanumerics
+            if(word.length > 0) {
+              v[i] = v[i].replace( new RegExp("(" + word + ")" , 'gi'), "<strong>$1</strong>" );
+            }
+          }
         }
       }
       return v;
