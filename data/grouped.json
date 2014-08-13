@@ -1,0 +1,36 @@
+[
+  {
+    "title": "Larks",
+    "data": [
+      {"id":1, "title": "Clapper Lark", "url":"http://tiny-autocomplete.hal.se/larks/1"},
+      {"id":2, "title": "Spike-heeled Lark", "url":"http://tiny-autocomplete.hal.se/larks/2"},
+      {"id":3, "title": "Greater Hoopoe-lark", "url":"http://tiny-autocomplete.hal.se/larks/3"},
+      {"id":4, "title": "Calandra Lark", "url":"http://tiny-autocomplete.hal.se/larks/4"}
+    ]
+  },
+  {
+    "title": "Wrens",
+    "template": "<li class='autocomplete-item'>{{title}}<br />(sound: {{sound}})</li>",
+    "data": [
+      {"id":1, "title":"Cactus Wren", "sound":"warbling"},
+      {"id":2, "title":"Rock Wren", "sound":"shouting"},
+      {"id":3, "title":"Sedge Wren", "sound":"screaming"},
+      {"id":4, "title":"Carolina Wren", "sound":"tweeting"}
+    ]
+  },
+  {
+    "title": "Starlings",
+    "template": "<li class='autocomplete-item' style='color:{{color}}'>{{title}}</li>",
+    "data": [
+      {"id":1, "title":"Asian Glossy Starling", "color":"#888888"},
+      {"id":2, "title":"Golden Myna", "color":"#118888"}
+    ]
+  },
+  {
+    "title": "Thrushes",
+    "data": [
+      {"id":1, "title":"Eastern Bluebird"},
+      {"id":2, "title":"Mountain Bluebird"}
+    ]
+  }
+]
