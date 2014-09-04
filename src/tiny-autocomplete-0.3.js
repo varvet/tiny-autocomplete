@@ -27,6 +27,7 @@
       markAsBold: true,
       grouped: false,
       queryProperty: 'q',
+      queryParameters: {},
       method: 'get',
       scrollOnFocus: 'auto',
       maxItems: 100,
@@ -147,6 +148,7 @@
      */
     remoteRequest: function(val) {
       var data = {};
+      $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
       $.ajax({
         method: this.settings.method,
@@ -371,7 +373,7 @@
           jsonData = this.markHitText( jsonData, v )
         }
         this.list.append( this.template( this.json[i].template || this.settings.itemTemplate, jsonData ) );
-      }      
+      }
       this.el.append( this.list );
     },
 
