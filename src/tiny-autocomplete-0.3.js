@@ -148,7 +148,7 @@
      */
     remoteRequest: function(val) {
       var data = {};
-      $.extend(data, this.settings.queryParameters];
+      $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
       $.ajax({
         method: this.settings.method,
