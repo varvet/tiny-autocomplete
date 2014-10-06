@@ -31,6 +31,7 @@
       maxItems: 100,
       keyboardDelay: 300,
       lastItemTemplate: null,
+      closeOnSelect: true,
       groupContentName: '.autocomplete-items',
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
       itemTemplate: '<li class="autocomplete-item">{{title}}</li>'
@@ -41,6 +42,7 @@
      * @return {null}
      */
     init: function() {
+      this.defaults.templateMethod = this.template;
       this.settings = $.extend({}, this.defaults, this.options);
       this.setupSettings();
       this.setupMarkup();
@@ -141,6 +143,7 @@
      */
     setupMarkup: function() {
       this.field.addClass('autocomplete-field');
+      this.field.attr('autocomplete', 'off');
       this.field.wrap('<div class="autocomplete" />');
       this.el = this.field.parent();
     },
@@ -151,6 +154,9 @@
      * @return {null}
      */
     remoteRequest: function(val) {
+      if(this.settings.onBeforeRequest) {
+        this.settings.onBeforeRequest.call(this, val);
+      }
       var data = {};
       $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
@@ -159,7 +165,7 @@
         url: this.settings.url,
         dataType: 'json',
         data: data,
-        success: $.proxy(this.onReceiveData, this)
+        success: $.proxy(this.beforeReceiveData, this)
       });
     },
 
@@ -171,10 +177,10 @@
     localRequest: function(val) {
       var r;
       if(this.settings.grouped) {
-        this.onReceiveData( this.matchLocalPatternGrouped(val) );
+        this.beforeReceiveData( this.matchLocalPatternGrouped(val) );
       }
       else {
-        this.onReceiveData( this.matchLocalPatternFlat(val) );
+        this.beforeReceiveData( this.matchLocalPatternFlat(val) );
       }
     },
 
@@ -332,7 +338,7 @@
       this.list.remove();
       this.list = $('<ul class="autocomplete-list" />');
       for(var i in this.json) {
-        this.list.append( this.template( this.settings.groupTemplate, this.json[i] ) );
+        this.list.append( this.settings.templateMethod( this.settings.groupTemplate, this.json[i] ) );
       }
 
       this.el.append( this.list );
@@ -353,7 +359,7 @@
           if(this.settings.markAsBold) {
             jsonData = this.markHitText( jsonData, v )
           }
-          group.append( this.template( this.json[i].template || this.settings.itemTemplate, jsonData ) );
+          group.append( this.settings.templateMethod( this.json[i].template || this.settings.itemTemplate, jsonData ) );
         }
       }
     },
@@ -372,7 +378,7 @@
         if(this.settings.markAsBold) {
           jsonData = this.markHitText( jsonData, v )
         }
-        this.list.append( this.template( this.json[i].template || this.settings.itemTemplate, jsonData ) );
+        this.list.append( this.settings.templateMethod( this.json[i].template || this.settings.itemTemplate, jsonData ) );
       }
       this.el.append( this.list );
     },
@@ -383,7 +389,7 @@
      * @return {null}
      */
     renderLastItem: function() {
-      this.list.append( this.template( this.settings.lastItemTemplate, {title: this.field.val()} ) );
+      this.list.append( this.settings.templateMethod( this.settings.lastItemTemplate, {title: this.field.val()} ) );
     },
 
     /**
@@ -440,13 +446,23 @@
     },
 
     /**
-     * Data received from server, determine what to do with it and
-     * render everything.
+     * This is mostly an opportunity to hook into the data served by
+     * server to do your own thing
      * @param  {object} data JSON from server
      * @param  {object} xhr  XHR object
      * @return {null}
      */
-    onReceiveData: function(data, xhr) {
+    beforeReceiveData: function(data, xhr) {
+      this.onReceiveData(data);
+    },
+
+    /**
+     * Data received from server, determine what to do with it and
+     * render everything.
+     * @param  {object} data JSON from server
+     * @return {null}
+     */
+    onReceiveData: function(data) {
       this.selectedItem = null;
       this.json = data;
       if(this.settings.grouped) {
@@ -540,7 +556,9 @@
         this.settings.onSelect.apply(this.field, [item, val]);
       }
       this.lastSearch = this.field.val();
-      this.closeList();
+      if(this.settings.closeOnSelect) {
+        this.closeList();
+      }
     }
   };
 
@@ -556,6 +574,8 @@
       }
 
       var d = new TinyAutocomplete(this, settings).init();
+
+      // Expose "tinyAutocomplete.settings" so it can be changed from outside
       this.tinyAutocomplete = {settings: d.settings};
     });
   };
