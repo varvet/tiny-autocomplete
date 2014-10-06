@@ -9,7 +9,7 @@
 (function(window, $) {
   var TinyAutocomplete = function(el, options){
     var that = this; // This is just to minify better
-    this.field = $(el);
+    that.field = $(el);
     that.el = null;
     that.json = null;
     that.items = [];
@@ -154,9 +154,7 @@
      * @return {null}
      */
     remoteRequest: function(val) {
-      if(this.settings.onBeforeRequest) {
-        this.settings.onBeforeRequest.call(this, val);
-      }
+      this.field.trigger('beforerequest', [this, val]);
       var data = {};
       $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
@@ -453,7 +451,9 @@
      * @return {null}
      */
     beforeReceiveData: function(data, xhr) {
-      this.onReceiveData(data);
+      this.json = data;
+      this.field.trigger('receivedata', [this, data, xhr]);
+      this.onReceiveData(this.json);
     },
 
     /**
@@ -464,7 +464,6 @@
      */
     onReceiveData: function(data) {
       this.selectedItem = null;
-      this.json = data;
       if(this.settings.grouped) {
         // First, render groups
         this.renderGroups();
@@ -575,7 +574,7 @@
 
       var d = new TinyAutocomplete(this, settings).init();
 
-      // Expose "tinyAutocomplete.settings" so it can be changed from outside
+      // Expose "tinyAutocomplete.settings" to the cold outside
       this.tinyAutocomplete = {settings: d.settings};
     });
   };
