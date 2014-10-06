@@ -3,7 +3,7 @@
  * Small and fast autocomplete plugin for Zepto and jQuery.
  * Written by Johan Halse, https://twitter.com/hejsna, johan@varvet.se
  * License: http://johanhalse.mit-license.org
- * @version 0.3
+ * @version 0.4
  * @return {object}         Self
  */
 (function(window, $) {
@@ -235,7 +235,7 @@
     /**
      * Find DOM object at specified index
      * @param  {number} i Index
-     * @return {object}   jQuery object
+     * @return {object}   DOM object
      */
     itemAt: function(i) {
       if(i == null) {
@@ -443,7 +443,7 @@
      * Data received from server, determine what to do with it and
      * render everything.
      * @param  {object} data JSON from server
-     * @param  {object} xhr  jQuery XHR object
+     * @param  {object} xhr  XHR object
      * @return {null}
      */
     onReceiveData: function(data, xhr) {
@@ -472,22 +472,12 @@
     },
 
     /**
-     * Keyup handler that sets up a delayed check if the field value is
-     * new. If the keyboardDelay option isn't set, it does the check
-     * immediately.
-     * @param  {object} e Normalized jQuery event object
+     * Keyup handler. If value has changed and contains min number of chars,
+     * fire the (debounced) request.
+     * @param  {object} e Normalized Event object
      * @return {null}
      */
     onKeyUp: function(e) {
-      this.checkFieldValue();
-    },
-
-    /**
-     * Check whether the field value is the same as last time and
-     * satisfies minimum character limit.
-     * @return {null}
-     */
-    checkFieldValue: function() {
       if(this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
         this.request( this.field.val() );
       }
@@ -498,7 +488,7 @@
 
     /**
      * Keydown handler to take care of keyboard navigation.
-     * @param  {object} e Normalized jQuery event object
+     * @param  {object} e Normalized event object
      * @return {null}
      */
     onKeyDown: function(e) {
@@ -522,7 +512,7 @@
 
     /**
      * Click handler, handle mouse/touch selection of items.
-     * @param  {object} e Normalized jQuery event object
+     * @param  {object} e Normalized event object
      * @return {null}
      */
     onClickItem: function(e) {
@@ -541,7 +531,7 @@
     /**
      * User has selected an object with mouse or keyboard - act on it
      * and fire any user-supplied callback.
-     * @param  {object} item jQuery object for the field
+     * @param  {object} item DOM object for the field
      * @param  {object} val  Item value from server
      * @return {null}
      */
