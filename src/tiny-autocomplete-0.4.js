@@ -16,8 +16,6 @@
     that.selectedItem = null;
     that.list = $('<ul class="autocomplete-list" />');
     that.lastSearch = null;
-    that.searchTimeout = null;
-    that.searchTimeLimit = null;
     that.options = options;
   };
 
@@ -65,6 +63,28 @@
     },
 
     /**
+     * Debounce function from http://davidwalsh.name/javascript-debounce-function
+     * @param  {function} func       function to execute
+     * @param  {number}   wait       delay in milliseconds
+     * @param  {boolean}  immediate  whether to fire on trailing or leading
+     * @return {function}            debounced function
+     */
+    debounce: function(func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    },
+
+    /**
      * Tweak settings a bit, since we don't have any private functions
      * defined at constructor time.
      * @return {null}
@@ -87,6 +107,11 @@
       }
       else {
         this.request = this.remoteRequest;
+      }
+
+      // Set the keyboard delay before search fires    
+      if(this.settings.keyboardDelay != null) {    
+        this.request = this.debounce(this.request, this.settings.keyboardDelay);
       }
     },
 
@@ -122,26 +147,6 @@
     },
 
     /**
-     * Final gateway before the search fires: are we allowed to send,
-     * or was the last search too recent? If it was, we delay this
-     * search until we're allowed to do it again.
-     * @param  {string} val Value to search for
-     * @return {null}
-     */
-    limitedRequest: function(val) {
-      if(new Date().getTime() > this.searchTimeLimit) {
-        this.request(val);
-      }
-      else {
-        var that = this;
-        clearTimeout(this.searchTimeout);
-        this.searchTimeout = setTimeout(function() {
-          that.request(val);
-        }, this.searchTimeLimit - new Date().getTime());
-      }
-    },
-
-    /**
      * Fire request to specified url
      * @param  {string} val Value to search for
      * @return {null}
@@ -157,10 +162,6 @@
         data: data,
         success: $.proxy(this.onReceiveData, this)
       });
-
-      if(this.settings.timeLimit) {
-        this.searchTimeLimit = new Date().getTime() + this.settings.timeLimit;
-      }
     },
 
     /**
@@ -391,7 +392,7 @@
      * @return {null}
      */
     closeList: function() {
-      $('.main').off('click');
+      $('html').off('click');
       this.list.remove();
       this.selectedItem = null;
     },
@@ -468,7 +469,7 @@
       }
 
       // Click outside should close the list
-      $('.main').one('click', $.proxy(this.closeList, this));
+      $('html').one('click', $.proxy(this.closeList, this));
     },
 
     /**
@@ -493,13 +494,12 @@
 
     /**
      * Check whether the field value is the same as last time and
-     * satisfies minimum character limit. If yes, the final check is
-     * whether the timeLimit option is set.
+     * satisfies minimum character limit.
      * @return {null}
      */
     checkFieldValue: function() {
       if(this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
-        this.limitedRequest( this.field.val() );
+        this.request( this.field.val() );
       }
       if(this.field.val() == '') {
         this.closeList();
