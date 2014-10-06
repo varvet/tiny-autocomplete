@@ -30,7 +30,7 @@
       scrollOnFocus: 'auto',
       maxItems: 100,
       timeLimit: null,
-      keyboardDelay: 200,
+      keyboardDelay: 300,
       lastItemTemplate: null,
       groupContentName: '.autocomplete-items',
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
@@ -480,16 +480,7 @@
      * @return {null}
      */
     onKeyUp: function(e) {
-      if(this.settings.keyboardDelay) {
-        var that = this;
-        clearTimeout(this.keyboardTimeout);
-        this.keyboardTimeout = setTimeout(function() {
-          that.checkFieldValue();
-        }, this.settings.keyboardDelay);
-      }
-      else {
-        this.checkFieldValue();
-      }
+      this.checkFieldValue();
     },
 
     /**
