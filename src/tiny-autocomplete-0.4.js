@@ -29,7 +29,6 @@
       method: 'get',
       scrollOnFocus: 'auto',
       maxItems: 100,
-      timeLimit: null,
       keyboardDelay: 300,
       lastItemTemplate: null,
       groupContentName: '.autocomplete-items',
