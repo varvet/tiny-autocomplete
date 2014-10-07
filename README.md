@@ -2,32 +2,26 @@
 A small and snappy (2k minified+gzipped!) JavaScript autocomplete plugin for Zepto and jQuery.
 
 ## Why?
-Because it seems the only great autocomplete plugin out there is the jQuery UI one. It's a lovely plugin, both good-looking and robust, but it also requires you to pull in >100k of JavaScript and some 20k of CSS which makes it a non-starter for most projects, unless you're already using the jQuery UI components. And it doesn't support mobile or tablets! So the aim of Tiny Autocomplete is to make a plugin that's
+Because the world needs a small and focused autocomplete plugin, not one that's dependent on jQuery UI or Bootstrap or Ember or Angular or whatever. Those have their place too but if you don't feel like pulling down some 200k of JavaScript and CSS just to get autocomplete functionality, this module is for you. The aim of Tiny Autocomplete is to make a plugin that's
 * Small footprint
 * Fast
-* Compatible with both Zepto and jQuery
+* Compatible with both Zepto and jQuery (and hopefully most $ libraries)
 * Working on tablets and mobile devices
 
-Tiny Autocomplete also tries to be extendable. There's no abuse of closures or effort to make things private within the plugin, so if you want to monkey patch a built-in function, change a setting at runtime, or build a plugin for it - go right ahead!
+Tiny Autocomplete also tries hard to be extendable. There's no abuse of closures or effort to make things private within the plugin so if you want to monkey patch a built-in function, change a setting at runtime, or build a plugin for it - go right ahead!
 
 ## Data and templating
-Tiny Autocomplete is a little picky with its JSON formatting. You can either just supply it with an array of objects (and those can contain arbitrary data), or you can feed it an array of groups. The grouped array items need a property called "data" that contains the array of objects instead. It's probably easiest to look at the local data examples if you need help. It's pretty straightforward. If you don't have control over your data source, you can overwrite the `onReceiveData` callback with something hand-rolled instead.
+Tiny Autocomplete is a little picky with its JSON formatting. You can either just supply it with an array of objects (and those can contain arbitrary data), or you can feed it an array of groups. The grouped array items need a property called "data" that contains the array of objects instead. It's probably easiest to look at the local data examples if you need help - it's pretty straightforward. If you don't have control over your data, you might be able to hook into the `receivedata` event and rewire it a little - check the bottom of this documentation for an example of that.
 
-Tiny Autocomplete also doesn't really assume it knows what your markup wants to look like. There's a built-in default but there's also a micro-templating engine in there which sounds kind of ominous but is actually really nifty. Since you can supply Tiny Autocomplete with your own little mustache-like template string, there's no magic "name" or "id" attribute or whatever. You can feed it a thumbnail, an icon, 5 levels of `<div>` wrapping - the sky's the limit.
+Tiny Autocomplete also doesn't really assume it knows what your markup wants to look like. There's a built-in default but there's also a micro-templating engine in there which sounds kind of ominous but is actually really nifty. Since you can supply Tiny Autocomplete with your own little mustache-like template string, there's no magic "name" or "id" attribute or whatever. You can feed it a thumbnail, an icon, 5 levels of `<div>` wrapping - the sky's the limit. You can swap out the templating for your own engine, too.
 
-Note: while you can use Tiny Autocomplete with a local data source, the pattern matching implementation is quite naïve. Intelligently searching through a result set and returning it is what servers do really well, so maybe that's what you want to do?
-
-## Demos
-[Flat search with local data]
-
-[Grouped search with local data]
-
-[Flat search with remote data]
-
-[Grouped search with remote data]
+Note: while you can use Tiny Autocomplete with a local data source, the pattern matching implementation is pretty naïve. Intelligently searching through a result set and returning it is what servers do really well, so maybe that's what you want to do?
 
 ## Installation
 Just include tiny-autocomplete-0.x.js (development) or tiny-autocomplete-0.x-min.js (production) after Zepto or jQuery. Include tiny-autocomplete.css and you're good to go!
+
+## Demos
+There are some demos included. We should probably put up a server to host them but for now you can check them out via [http-server](https://www.npmjs.org/package/http-server) or something like that. Look at the HTML files to see what they're doing.
 
 ## Usage
 ### Initialize an autocomplete field
@@ -165,6 +159,13 @@ $('.autocomplete').tinyAutocomplete({ lastItemTemplate: '<li class="autocomplete
 Set this template if you want to display a last item without any data bound to it. The field's current value will be supplied as {{title}}. This is useful for giving users an "all results for X" option at the bottom of the list.
 
 
+#### templateMethod:
+```javascript
+$('.autocomplete').tinyAutocomplete({ templateMethod: _.template });
+```
+You can use this to override Tiny Autocomplete's cheap-and-cheerful templating function with something more powerful. The template function takes two arguments. The first argument is the template itself (which is a string) and the second is the object that Tiny Autocomplete passes in to the template to render it. You can use underscore's "template" method as a drop-in replacement and there are probably others that work the same way.
+
+
 ### Global defaults
 If you want to, you can set global options for all your autocompletes by setting them on the $.tinyAutocomplete.defaults object, like so:
 ```javascript
@@ -177,6 +178,37 @@ Easiest way is to just call
 $('.autocomplete').tinyAutocomplete({ settings... });
 ```
 TinyAutocomplete won't instantiate again, it will just change the settings on the object that's already there. If you want to, you can access the settings object on the element itself - it's in el.tinyAutocomplete.settings.
+
+
+## Events
+Tiny Autocomplete fires some events for you to hook into. The only ones implemented right now are `beforerequest` and `receivedata`. You can use them to maybe show a spinner somewhere else or something like that, but the `receivedata` event is useful for massaging the data you get back from your server, too. If your json is structured a little differently than expected, perhaps something like this:
+```javascript
+{
+  "thing": true,
+  "stuff": {
+    "data": [{
+      "title": "Foo",
+      "id": 1
+    },
+    {
+      "title": "Bar",
+      "id": 2
+    }]
+  }
+}
+```
+
+...you could hook into the `receivedata` event to do this:
+```javascript
+$('.field').tinyAutocomplete({
+  url: 'http://www.example.com'
+})
+.on('receivedata', function(ev, tinyAutocomplete, json) {
+  // tinyAutocomplete.json is the variable that Tiny Autocomplete uses
+  // for displaying the options later on
+  tinyAutocomplete.json = json.stuff.data;
+});
+```
 
 ## License
 [MIT]
