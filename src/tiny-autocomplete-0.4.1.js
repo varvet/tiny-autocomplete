@@ -315,12 +315,14 @@
       var words = str.split(' ');
       for(var i in v) {
         if(typeof(v[i]) == 'string' && i != 'template') {
+          var replacements = [str];
           for(var j=0;j<words.length;j++) {
             var word = words[j].trim().replace(/[^a-ö0-9]/gi,''); // Remove non-alphanumerics
             if(word.length > 0) {
-              v[i] = v[i].replace( new RegExp("(" + word + ")" , 'gi'), "<strong>$1</strong>" );
+              replacements.push(word);
             }
           }
+          v[i] = v[i].replace( new RegExp("(" + replacements.join('|') + ")" , 'gi'), "<strong>$1</strong>" );
         }
       }
       return v;
