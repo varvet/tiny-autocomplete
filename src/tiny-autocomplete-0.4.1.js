@@ -3,7 +3,7 @@
  * Small and fast autocomplete plugin for Zepto and jQuery.
  * Written by Johan Halse, https://twitter.com/hejsna, johan@varvet.se
  * License: http://johanhalse.mit-license.org
- * @version 0.4
+ * @version 0.4.1
  * @return {object}         Self
  */
 (function(window, $) {
@@ -316,7 +316,7 @@
       for(var i in v) {
         if(typeof(v[i]) == 'string' && i != 'template') {
           for(var j=0;j<words.length;j++) {
-            var word = words[j].trim().replace(/[^a-z0-9]/gi,''); // Remove non-alphanumerics
+            var word = words[j].trim().replace(/[^a-ö0-9]/gi,''); // Remove non-alphanumerics
             if(word.length > 0) {
               v[i] = v[i].replace( new RegExp("(" + word + ")" , 'gi'), "<strong>$1</strong>" );
             }
