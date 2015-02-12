@@ -42,7 +42,7 @@ The url to run search queries against.
 ```javascript
 $('.autocomplete').tinyAutocomplete({ data:[...] });
 ```
-The formatted JSON data, either a flat array or a grouped one. Tiny Autocomplete will search *all* the fields in your data and return the items where it found a match.
+Used if you want to search through some local JSON data, instead of requesting data from a server. Tiny Autocomplete will search *all* the fields in your data and return the items where it found a match.
 
 
 #### method:
@@ -78,13 +78,6 @@ For vertically-challenged touch devices that pop up an on-screen keyboard, it's 
 $('.autocomplete').tinyAutocomplete({ keyboardDelay:400 });
 ```
 The delay between user releasing the key and search being performed. Set this high to avoid firing lots of requests while the user is typing, or low for more responsiveness. Defaults to `200` and can be set to `null` to bypass it altogether.
-
-
-#### timeLimit:
-```javascript
-$('.autocomplete').tinyAutocomplete({ timeLimit:1000 });
-```
-Maximum amount of searches allowed in a given time frame. The last search is queued up and will fire as soon as it's allowed to do so.
 
 
 #### queryProperty:
@@ -142,7 +135,13 @@ Default template for an item is `<li class="autocomplete-item">{{title}}</li>`.
 ```javascript
 $('.autocomplete').tinyAutocomplete({ groupTemplate:'<li class="autocomplete-group"><h2>{{title}}</h2><ul class="autocomplete-items" /></li>' });
 ```
-Change template for an item group, when using grouped view. Default is `<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>`. Make sure your `groupContentName` matches the ul class!
+Change template for an item group, when using grouped view. Default is
+```html
+<li class="autocomplete-group">
+  <span class="autocomplete-group-header">{{title}}</span>
+  <ul class="autocomplete-items" /></li>
+```
+Make sure your `groupContentName` matches the ul class!
 
 
 #### groupContentName:
