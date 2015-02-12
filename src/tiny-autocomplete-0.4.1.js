@@ -173,7 +173,6 @@
      * @return {null}
      */
     localRequest: function(val) {
-      var r;
       if(this.settings.grouped) {
         this.beforeReceiveData( this.matchLocalPatternGrouped(val) );
       }
