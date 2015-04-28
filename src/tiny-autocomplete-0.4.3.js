@@ -3,7 +3,7 @@
  * Small and fast autocomplete plugin for Zepto and jQuery.
  * Written by Johan Halse, https://twitter.com/hejsna, johan@varvet.se
  * License: http://johanhalse.mit-license.org
- * @version 0.4.2
+ * @version 0.4.3
  * @return {object}         Self
  */
 (function(window, $) {
@@ -517,7 +517,7 @@
         this.nextItem();
       }
       if(e.keyCode == 13) {  // Enter
-        this.onPressEnter();
+        this.onPressEnter(e);
       }
       if(e.keyCode == 27) {  // Esc
         e.preventDefault();
@@ -539,7 +539,7 @@
      * User has pressed enter, select object or perform search.
      * @return {null}
      */
-    onPressEnter: function() {
+    onPressEnter: function(e) {
       // If field is filled in but no item is selected, we don't block
       // submit
       if(this.selectedItem === null) {
