@@ -110,8 +110,8 @@
         this.request = this.remoteRequest;
       }
 
-      // Set the keyboard delay before search fires    
-      if(this.settings.keyboardDelay != null) {    
+      // Set the keyboard delay before search fires
+      if(this.settings.keyboardDelay != null) {
         this.request = this.debounce(this.request, this.settings.keyboardDelay);
       }
     },
@@ -517,7 +517,6 @@
         this.nextItem();
       }
       if(e.keyCode == 13) {  // Enter
-        e.preventDefault();
         this.onPressEnter();
       }
       if(e.keyCode == 27) {  // Esc
@@ -541,6 +540,13 @@
      * @return {null}
      */
     onPressEnter: function() {
+      // If field is filled in but no item is selected, we don't block
+      // submit
+      if(this.selectedItem === null) {
+        return true;
+      }
+
+      e.preventDefault();
       this.onSelect( this.itemAt( this.selectedItem ), this.items[this.selectedItem] );
     },
 
