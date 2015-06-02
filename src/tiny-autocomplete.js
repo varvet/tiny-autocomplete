@@ -3,7 +3,7 @@
  * Small and fast autocomplete plugin for Zepto and jQuery.
  * Written by Johan Halse, https://twitter.com/hejsna, johan@varvet.se
  * License: http://johanhalse.mit-license.org
- * @version 0.4.3
+ * @version 0.4.4
  * @return {object}         Self
  */
 (function(window, $) {
