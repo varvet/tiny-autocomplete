@@ -123,6 +123,7 @@
   <script>
     $('#autocomplete-0').tinyAutocomplete({
       data: birds,
+      showNoResults: true,
       lastItemTemplate: '<li class="autocomplete-item autocomplete-item-last">Show all results for "{{title}}"</li>',
       onSelect: function(el, val) {
         if(val == null) {
