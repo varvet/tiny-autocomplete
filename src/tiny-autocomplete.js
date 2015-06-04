@@ -246,7 +246,8 @@
       if(i == null) {
         return $();
       }
-      return $('.autocomplete-item').eq(i);
+
+      return this.el.find('.autocomplete-item').eq(i);
     },
 
     /**
