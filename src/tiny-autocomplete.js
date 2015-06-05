@@ -33,6 +33,9 @@
       keyboardDelay: 300,
       lastItemTemplate: null,
       closeOnSelect: true,
+      preloadData: false,
+      preloadUrl: false,
+      formatDataFunction: false,
       groupContentName: '.autocomplete-items',
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
       itemTemplate: '<li class="autocomplete-item">{{title}}</li>',
@@ -50,6 +53,7 @@
       this.setupSettings();
       this.setupMarkup();
       this.setupEvents();
+      this.preloadData();
 
       return this;
     },
@@ -62,7 +66,14 @@
      */
     template: function(template, vars) {
       return template.replace(/{{\s*[\w]+\s*}}/g, function(v) {
-        return vars[v.substr(2,v.length-4)];
+        var value = vars[v.substr(2, v.length - 4)];
+
+        // Prevent printing "undefined" to view
+        if(typeof value == "undefined") {
+          return '';
+        }
+
+        return value;
       });
     },
 
@@ -152,18 +163,33 @@
     },
 
     /**
+     * Preload data for suggestions
+     * @return {null}
+     */
+    preloadData: function() {
+      this.preloadedDataShown = false;
+      if(this.settings.preloadData) {
+        this.beforeReceiveData(this.settings.preloadData)
+      }
+      else if(this.settings.preloadUrl) {
+        this.remoteRequest(null, this.settings.preloadUrl);
+      }
+    },
+
+    /**
      * Fire request to specified url
      * @param  {string} val Value to search for
      * @return {null}
      */
-    remoteRequest: function(val) {
+    remoteRequest: function(val, url) {
+      url = url || this.settings.url;
       this.field.trigger('beforerequest', [this, val]);
       var data = {};
       $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
       $.ajax({
         method: this.settings.method,
-        url: this.settings.url,
+        url: url,
         dataType: 'json',
         data: data,
         success: $.proxy(this.beforeReceiveData, this)
@@ -247,7 +273,6 @@
       if(i == null) {
         return $();
       }
-
       return this.el.find('.autocomplete-item').eq(i);
     },
 
@@ -465,6 +490,13 @@
      * @return {null}
      */
     beforeReceiveData: function(data, xhr) {
+
+      // If data formatting function given in settings, format the data before passing it to view
+      // Handy when you have multiple autocompletes using eg. dynamically generated options
+      if(this.settings.formatDataFunction) {
+        data = this.settings.formatDataFunction(data);
+      }
+
       this.json = data;
       this.field.trigger('receivedata', [this, data, xhr]);
       this.onReceiveData(this.json);
@@ -503,8 +535,20 @@
         this.renderLastItem();
       }
 
-      // Click outside should close the list
-      $('html').one('click', $.proxy(this.closeList, this));
+      var closeIsOk = true
+
+      // If using preloaded data, don't hide the list on first click outside input
+      if(this.settings.preloadData || this.settings.preloadUrl) {
+        if(!this.preloadedDataShown) {
+          closeIsOk = false;
+          this.preloadedDataShown = true;
+        }
+      }
+
+      if(closeIsOk) {
+        // Click outside should close the list
+        $('html').one('click', $.proxy(this.closeList, this));
+      }
     },
 
     /**
@@ -517,7 +561,19 @@
       if(this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
         this.request( this.field.val() );
       }
-      if(this.field.val() == '') {
+
+      // This check makes sense when used with preloaded data
+      var isValidKey = false;
+      if(
+        e.keyCode == 38 ||  // Up
+        e.keyCode == 40 ||  // Down
+        e.keyCode == 13 ||  // Enter
+        e.keyCode == 27     // Esc
+      ) {
+        isValidKey = true;
+      }
+
+      if(this.field.val() == '' && !isValidKey) {
         this.lastSearch = '';
         this.closeList();
       }

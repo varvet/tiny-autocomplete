@@ -179,6 +179,30 @@ $('.autocomplete').tinyAutocomplete({ noResultsTemplate: '<li class="autocomplet
 Template for the "No results found" message. Will only be shown if `showNoResults` option is enabled. Uses same templating engine as the other templates.
 
 
+#### preloadData:
+```javascript
+$('.autocomplete').tinyAutocomplete({ preloadData: [...] });
+```
+Similar to `data` option, but the preloaded data will be shown immediately. No need to type anything.
+After typing, the default behavior kicks in and autocomplete is then using data from `data` or from `url`.
+
+
+#### preloadUrl:
+```javascript
+$('.autocomplete').tinyAutocomplete({ preloadUrl: 'http://www.example.com/search' });
+```
+Similar to `url` option, but the preloaded data will be fetched and shown immediately. No need to type anything.
+After typing, the default behavior kicks in and autocomplete is then using data from `data` or from `url`.
+
+
+#### formatDataFunction:
+```javascript
+$('.autocomplete').tinyAutocomplete({ formatDataFunction: function(json) {} });
+```
+By setting this option, you can format the data how ever you like, before it is passed to the renderer.
+Works in very similar fashion to the `receivedata` event, only difference is that it is an option passed to autocomplete, instead of being an event.
+
+
 ### Global defaults
 If you want to, you can set global options for all your autocompletes by setting them on the $.tinyAutocomplete.defaults object, like so:
 ```javascript
