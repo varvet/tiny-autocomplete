@@ -34,7 +34,9 @@
       closeOnSelect: true,
       groupContentName: '.autocomplete-items',
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
-      itemTemplate: '<li class="autocomplete-item">{{title}}</li>'
+      itemTemplate: '<li class="autocomplete-item">{{title}}</li>',
+      showNoResults: false,
+      noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>'
     },
 
     /**
@@ -244,7 +246,8 @@
       if(i == null) {
         return $();
       }
-      return $('.autocomplete-item').eq(i);
+
+      return this.el.find('.autocomplete-item').eq(i);
     },
 
     /**
@@ -392,6 +395,15 @@
     },
 
     /**
+     * If there's a "no results found for..." item, this function
+     * gets called.
+     * @return {null}
+     */
+    renderNoResults: function() {
+      this.list.append( this.settings.templateMethod( this.settings.noResultsTemplate, {title: this.field.val()} ) );
+    },
+
+    /**
      * Removes list from DOM and resets state.
      * @return {null}
      */
@@ -478,6 +490,13 @@
         this.renderItemsFlat();
       }
 
+      // If no results, render no results message, if applicable
+      if(!this.items.length) {
+        if(this.settings.showNoResults) {
+          this.renderNoResults();
+        }
+      }
+
       // Render last item, if applicable
       if(this.settings.lastItemTemplate) {
         this.renderLastItem();
@@ -498,6 +517,7 @@
         this.request( this.field.val() );
       }
       if(this.field.val() == '') {
+        this.lastSearch = '';
         this.closeList();
       }
     },

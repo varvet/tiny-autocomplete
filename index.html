@@ -19,6 +19,7 @@
     $('#autocomplete-0').tinyAutocomplete({
       url: '/data/flat.json',
       maxItems: 7,
+      showNoResults: true,
       onSelect: function(el, val) {
         if(val == null) {
           $('.results').html('All results for "' + $(this).val() + '"" would go here');

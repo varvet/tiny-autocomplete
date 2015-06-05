@@ -165,6 +165,20 @@ $('.autocomplete').tinyAutocomplete({ templateMethod: _.template });
 You can use this to override Tiny Autocomplete's cheap-and-cheerful templating function with something more powerful. The template function takes two arguments. The first argument is the template itself (which is a string) and the second is the object that Tiny Autocomplete passes in to the template to render it. You can use underscore's "template" method as a drop-in replacement and there are probably others that work the same way.
 
 
+#### showNoResults:
+```javascript
+$('.autocomplete').tinyAutocomplete({ showNoResults: true });
+```
+By default Tiny Autocomplete will not show "No results" message when no data is found. Enabling this option will display the "No results found for foo" message.
+
+
+#### noResultsTemplate:
+```javascript
+$('.autocomplete').tinyAutocomplete({ noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>' });
+```
+Template for the "No results found" message. Will only be shown if `showNoResults` option is enabled. Uses same templating engine as the other templates.
+
+
 ### Global defaults
 If you want to, you can set global options for all your autocompletes by setting them on the $.tinyAutocomplete.defaults object, like so:
 ```javascript
