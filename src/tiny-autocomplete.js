@@ -2,8 +2,9 @@
  * Tiny Autocomplete
  * Small and fast autocomplete plugin for Zepto and jQuery.
  * Written by Johan Halse, https://twitter.com/hejsna, johan@varvet.se
+ * Contributions by Juha Tauriainen, https://github.com/JuhQ
  * License: http://johanhalse.mit-license.org
- * @version 0.4.4
+ * @version 0.4.5
  * @return {object}         Self
  */
 (function(window, $) {
