@@ -36,6 +36,8 @@
       groupContentName: '.autocomplete-items',
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
       itemTemplate: '<li class="autocomplete-item">{{title}}</li>',
+      containerTemplate: '<ul class="autocomplete-list" />',
+      wrapTemplate: '<div class="autocomplete" />',
       showNoResults: false,
       noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>'
     },
@@ -147,7 +149,7 @@
     setupMarkup: function() {
       this.field.addClass('autocomplete-field');
       this.field.attr('autocomplete', 'off');
-      this.field.wrap('<div class="autocomplete" />');
+      this.field.wrap(this.settings.wrapTemplate);
       this.el = this.field.parent();
     },
 
@@ -339,7 +341,7 @@
      */
     renderGroups: function() {
       this.list.remove();
-      this.list = $('<ul class="autocomplete-list" />');
+      this.list = $(this.settings.containerTemplate);
       for(var i in this.json) {
         this.list.append( this.settings.templateMethod( this.settings.groupTemplate, this.json[i] ) );
       }
@@ -373,7 +375,7 @@
      */
     renderItemsFlat: function() {
       this.list.remove();
-      this.list = $('<ul class="autocomplete-list" />');
+      this.list = $(this.settings.containerTemplate);
       var v = this.field.val();
       for(var i=0;i<this.json.length && i<this.settings.maxItems;i++) {
         var jsonData = $.extend({}, this.json[i]);
