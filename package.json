@@ -1,0 +1,25 @@
+{
+  "name": "tiny-autocomplete",
+  "version": "1.0.0",
+  "description": "A small and snappy (2k minified+gzipped!) JavaScript autocomplete plugin for Zepto and jQuery.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/klh/tiny-autocomplete.git"
+  },
+  "keywords": [
+    "autocomplete",
+    "plugin",
+    "Zepto",
+    "jQuery"
+  ],
+  "author": "Johan Halse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/klh/tiny-autocomplete/issues"
+  },
+  "homepage": "https://github.com/klh/tiny-autocomplete#readme"
+}
