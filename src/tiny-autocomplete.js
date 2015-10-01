@@ -39,7 +39,8 @@
       containerTemplate: '<ul class="autocomplete-list" />',
       wrapTemplate: '<div class="autocomplete" />',
       showNoResults: false,
-      noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>'
+      noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>',
+      ajaxsettings:{}
     },
 
     /**
@@ -163,13 +164,18 @@
       var data = {};
       $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
-      $.ajax({
-        method: this.settings.method,
-        url: this.settings.url,
-        dataType: 'json',
-        data: data,
-        success: $.proxy(this.beforeReceiveData, this)
-      });
+      $.ajax(this.returnAjaxConf(data));
+    },
+
+    returnAjaxConf: function(data){
+    var extendedSettings = $.extend(this.settings.ajaxSettings,{
+      method: this.settings.method,
+      url: this.settings.url,
+      dataType: 'json',
+      data: data,
+      success: $.proxy(this.beforeReceiveData, this)
+    });
+      return extendedSettings;
     },
 
     /**
