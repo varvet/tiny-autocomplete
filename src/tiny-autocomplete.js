@@ -447,7 +447,7 @@
      * @return {boolean} True if value has changed since last request
      */
     valueHasChanged: function() {
-      if(this.field.val() != this.lastSearch) {
+      if((this.field.val() != this.lastSearch) ||  (this.field.val() && (!this.list.is(':visible')))) {  // if list is removed (due to a reset of a form field or the likes) return true
         this.lastSearch = this.field.val();
         return true;
       }
