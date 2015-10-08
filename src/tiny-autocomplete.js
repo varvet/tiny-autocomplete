@@ -8,7 +8,7 @@
  * @return {object}         Self
  */
 (function(window, $) {
-  var TinyAutocomplete = function(el, options){
+  var TinyAutocomplete = function(el, options) {
     var that = this; // This is just to minify better
     that.field = $(el);
     that.el = null;
@@ -40,7 +40,7 @@
       wrapTemplate: '<div class="autocomplete" />',
       showNoResults: false,
       noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>',
-      ajaxsettings:{}
+      ajaxsettings: {}
     },
 
     /**
@@ -65,7 +65,7 @@
      */
     template: function(template, vars) {
       return template.replace(/{{\s*[\w]+\s*}}/g, function(v) {
-        return vars[v.substr(2,v.length-4)];
+        return vars[v.substr(2,v.length - 4)];
       });
     },
 
@@ -97,19 +97,19 @@
      * @return {null}
      */
     setupSettings: function() {
-      if(this.settings.scrollOnFocus == 'auto') {
+      if (this.settings.scrollOnFocus == 'auto') {
         this.settings.scrollOnFocus = this.isTouchDevice();
       }
 
       // We might be on a mobile device and have little in the way of
       // vertical real estate to work with. Cap it! This check needs a
       // bit more intelligence to it.
-      if($(window).height() < 500) {
-        this.settings.maxItems = Math.min( this.settings.maxItems, 3 );
+      if ($(window).height() < 500) {
+        this.settings.maxItems = Math.min(this.settings.maxItems, 3);
       }
 
       // Using local data or remote url?
-      if(this.settings.data) {
+      if (this.settings.data) {
         this.request = this.localRequest;
       }
       else {
@@ -117,7 +117,7 @@
       }
 
       // Set the keyboard delay before search fires
-      if(this.settings.keyboardDelay != null) {
+      if (this.settings.keyboardDelay != null) {
         this.request = this.debounce(this.request, this.settings.keyboardDelay);
       }
     },
@@ -133,10 +133,10 @@
 
       // Scroll to field if we're on a small device, we need that
       // screen real estate!
-      if(this.settings.scrollOnFocus) {
+      if (this.settings.scrollOnFocus) {
         this.field.on('focus', function() {
           var h = $(this).offset().top;
-          setTimeout(function(){
+          setTimeout(function() {
             window.scrollTo(0, h);
           }, 0);
         });
@@ -167,8 +167,8 @@
       $.ajax(this.returnAjaxConf(data));
     },
 
-    returnAjaxConf: function(data){
-    var extendedSettings = $.extend(this.settings.ajaxSettings,{
+    returnAjaxConf: function(data) {
+      var extendedSettings = $.extend(this.settings.ajaxSettings,{
       method: this.settings.method,
       url: this.settings.url,
       dataType: 'json',
@@ -184,11 +184,11 @@
      * @return {null}
      */
     localRequest: function(val) {
-      if(this.settings.grouped) {
-        this.beforeReceiveData( this.matchLocalPatternGrouped(val) );
+      if (this.settings.grouped) {
+        this.beforeReceiveData(this.matchLocalPatternGrouped(val));
       }
       else {
-        this.beforeReceiveData( this.matchLocalPatternFlat(val) );
+        this.beforeReceiveData(this.matchLocalPatternFlat(val));
       }
     },
 
@@ -199,7 +199,7 @@
      * @return {array}      Array of hits
      */
     matchLocalPatternFlat: function(val) {
-      return this.matchArray( val, this.settings.data );
+      return this.matchArray(val, this.settings.data);
     },
 
     /**
@@ -211,9 +211,9 @@
     matchLocalPatternGrouped: function(val) {
       var r = $.extend(true, [], this.settings.data);
 
-      for(var i=0;i<r.length;i++) {
+      for (var i = 0; i < r.length; i++) {
         var a = this.matchArray(val, r[i].data);
-        if(a.length == 0) {
+        if (a.length == 0) {
           r.splice(i, 1);
           i--;
         }
@@ -233,10 +233,10 @@
      */
     matchArray: function(val, arr) {
       var r = [];
-      for(var i=0;i<arr.length;i++) {
-        for(var j in arr[i]) {
-          if( (arr[i][j].toLowerCase && arr[i][j].toLowerCase().indexOf( val.toLowerCase() ) > -1) ||
-              (arr[i][j] == val) ) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j in arr[i]) {
+          if ((arr[i][j].toLowerCase && arr[i][j].toLowerCase().indexOf(val.toLowerCase()) > -1) ||
+              (arr[i][j] == val)) {
             r.push(arr[i]);
             break;
           }
@@ -252,7 +252,7 @@
      * @return {object}   DOM object
      */
     itemAt: function(i) {
-      if(i == null) {
+      if (i == null) {
         return $();
       }
 
@@ -265,8 +265,8 @@
      * @return {number}   Item's id in array
      */
     clickedItemAt: function(o) {
-      for(var i=0;i<this.items.length;i++) {
-        if(o == this.el.find('.autocomplete-item').eq(i).get(0)) {
+      for (var i = 0; i < this.items.length; i++) {
+        if (o == this.el.find('.autocomplete-item').eq(i).get(0)) {
           return i;
         }
       }
@@ -279,11 +279,12 @@
      */
     prevItem: function() {
       this.selectedItem--;
-      if(this.selectedItem < 0) {
-        this.selectedItem = null;
+      if (this.selectedItem < 0) {
+        var l = (this.settings.lastItemTemplate) ? this.items.length : this.items.length - 1;
+        this.selectedItem = l;
       }
 
-      this.markSelected( this.selectedItem );
+      this.markSelected(this.selectedItem);
     },
 
     /**
@@ -291,17 +292,17 @@
      * @return {null}
      */
     nextItem: function() {
-      if(this.selectedItem == null) {
+      if (this.selectedItem == null) {
         this.selectedItem = -1;
       }
       this.selectedItem++;
 
-      var l = (this.settings.lastItemTemplate) ? this.items.length : this.items.length-1;
-      if(this.selectedItem >= l) {
-        this.selectedItem = l;
+      var l = (this.settings.lastItemTemplate) ? this.items.length : this.items.length - 1;
+      if (this.selectedItem > l) {
+        this.selectedItem = 0;
       }
 
-      this.markSelected( this.selectedItem );
+      this.markSelected(this.selectedItem);
     },
 
     /**
@@ -311,7 +312,7 @@
      */
     markSelected: function(i) {
       this.el.find('.active').removeClass('active');
-      this.itemAt( i ).addClass('active');
+      this.itemAt(i).addClass('active');
     },
 
     /**
@@ -324,16 +325,16 @@
      */
     markHitText: function(v, str) {
       var words = str.split(' ');
-      for(var i in v) {
-        if(typeof(v[i]) == 'string' && i != 'template') {
+      for (var i in v) {
+        if (typeof(v[i][0]) == 'string' && i != 'template') {
           var replacements = [str];
-          for(var j=0;j<words.length;j++) {
+          for (var j = 0; j < words.length; j++) {
             var word = words[j].trim().replace(/[^a-ö0-9]/gi,''); // Remove non-alphanumerics
-            if(word.length > 0) {
+            if (word.length > 0) {
               replacements.push(word);
             }
           }
-          v[i] = v[i].replace( new RegExp("(" + replacements.join('|') + ")" , 'gi'), "<strong>$1</strong>" );
+          v[i][0] = v[i][0].replace(new RegExp('(' + replacements.join('|') + ')' , 'gi'), '<strong>$1</strong>');
         }
       }
       return v;
@@ -348,11 +349,11 @@
     renderGroups: function() {
       this.list.remove();
       this.list = $(this.settings.containerTemplate);
-      for(var i in this.json) {
-        this.list.append( this.settings.templateMethod( this.settings.groupTemplate, this.json[i] ) );
+      for (var i in this.json) {
+        this.list.append(this.settings.templateMethod(this.settings.groupTemplate, this.json[i]));
       }
 
-      this.el.append( this.list );
+      this.el.append(this.list);
     },
 
     /**
@@ -362,15 +363,15 @@
      */
     renderItemsInGroups: function() {
       var v = this.field.val();
-      for(var i=0;i<this.json.length;i++) {
-        var group = this.el.find( this.settings.groupContentName ).eq(i);
-        for(var j=0;j<this.json[i].data.length && j<this.settings.maxItems;j++) {
+      for (var i = 0; i < this.json.length; i++) {
+        var group = this.el.find(this.settings.groupContentName).eq(i);
+        for (var j = 0; j < this.json[i].data.length && j < this.settings.maxItems; j++) {
           var jsonData = $.extend({}, this.json[i].data[j]);
           // Strongify hits
-          if(this.settings.markAsBold) {
-            jsonData = this.markHitText( jsonData, v )
+          if (this.settings.markAsBold) {
+            jsonData = this.markHitText(jsonData, v);
           }
-          group.append( this.settings.templateMethod( this.json[i].template || this.settings.itemTemplate, jsonData ) );
+          group.append(this.settings.templateMethod(this.json[i].template || this.settings.itemTemplate, jsonData));
         }
       }
     },
@@ -383,15 +384,15 @@
       this.list.remove();
       this.list = $(this.settings.containerTemplate);
       var v = this.field.val();
-      for(var i=0;i<this.json.length && i<this.settings.maxItems;i++) {
+      for (var i = 0; i < this.json.length && i < this.settings.maxItems; i++) {
         var jsonData = $.extend({}, this.json[i]);
         // Strongify hits
-        if(this.settings.markAsBold) {
-          jsonData = this.markHitText( jsonData, v )
+        if (this.settings.markAsBold) {
+          jsonData = this.markHitText(jsonData, v);
         }
-        this.list.append( this.settings.templateMethod( this.json[i].template || this.settings.itemTemplate, jsonData ) );
+        this.list.append(this.settings.templateMethod(this.json[i].template || this.settings.itemTemplate, jsonData));
       }
-      this.el.append( this.list );
+      this.el.append(this.list);
     },
 
     /**
@@ -400,7 +401,7 @@
      * @return {null}
      */
     renderLastItem: function() {
-      this.list.append( this.settings.templateMethod( this.settings.lastItemTemplate, {title: this.field.val()} ) );
+      this.list.append(this.settings.templateMethod(this.settings.lastItemTemplate, {title: this.field.val()}));
     },
 
     /**
@@ -409,7 +410,7 @@
      * @return {null}
      */
     renderNoResults: function() {
-      this.list.append( this.settings.templateMethod( this.settings.noResultsTemplate, {title: this.field.val()} ) );
+      this.list.append(this.settings.templateMethod(this.settings.noResultsTemplate, {title: this.field.val()}));
     },
 
     /**
@@ -429,9 +430,9 @@
      */
     getItemsFromGroups: function() {
       var r = [];
-      for(var i in this.json) {
-        for(var j=0;j<this.json[i].data.length;j++) {
-          if(j < this.settings.maxItems) {
+      for (var i in this.json) {
+        for (var j = 0; j < this.json[i].data.length; j++) {
+          if (j < this.settings.maxItems) {
             r.push(this.json[i].data[j]);
           }
         }
@@ -447,7 +448,7 @@
      * @return {boolean} True if value has changed since last request
      */
     valueHasChanged: function() {
-      if((this.field.val() != this.lastSearch) ||  (this.field.val() && (!this.list.is(':visible')))) {  // if list is removed (due to a reset of a form field or the likes) return true
+      if ((this.field.val() != this.lastSearch) || (this.field.val() && (!this.list.is(':visible')))) { // if list is removed (due to a reset of a form field or the likes) return true
         this.lastSearch = this.field.val();
         return true;
       }
@@ -486,7 +487,7 @@
      */
     onReceiveData: function(data) {
       this.selectedItem = null;
-      if(this.settings.grouped) {
+      if (this.settings.grouped) {
         // First, render groups
         this.renderGroups();
 
@@ -500,14 +501,14 @@
       }
 
       // If no results, render no results message, if applicable
-      if(!this.items.length) {
-        if(this.settings.showNoResults) {
+      if (!this.items.length) {
+        if (this.settings.showNoResults) {
           this.renderNoResults();
         }
       }
 
       // Render last item, if applicable
-      if(this.settings.lastItemTemplate) {
+      if (this.settings.lastItemTemplate) {
         this.renderLastItem();
       }
 
@@ -522,10 +523,10 @@
      * @return {null}
      */
     onKeyUp: function(e) {
-      if(this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
-        this.request( this.field.val() );
+      if (this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
+        this.request(this.field.val());
       }
-      if(this.field.val() == '') {
+      if (this.field.val() == '') {
         this.lastSearch = '';
         this.closeList();
       }
@@ -537,18 +538,18 @@
      * @return {null}
      */
     onKeyDown: function(e) {
-      if(e.keyCode == 38) {  // Up
+      if (e.keyCode == 38) { // Up
         e.preventDefault();
         this.prevItem();
       }
-      if(e.keyCode == 40) {  // Down
+      if (e.keyCode == 40) { // Down
         e.preventDefault();
         this.nextItem();
       }
-      if(e.keyCode == 13) {  // Enter
+      if (e.keyCode == 13) { // Enter
         this.onPressEnter(e);
       }
-      if(e.keyCode == 27) {  // Esc
+      if (e.keyCode == 27) { // Esc
         e.preventDefault();
         this.closeList();
       }
@@ -571,12 +572,12 @@
     onPressEnter: function(e) {
       // If field is filled in but no item is selected, we don't block
       // submit
-      if(this.selectedItem === null) {
+      if (this.selectedItem === null) {
         return true;
       }
 
       e.preventDefault();
-      this.onSelect( this.itemAt( this.selectedItem ), this.items[this.selectedItem] );
+      this.onSelect(this.itemAt(this.selectedItem), this.items[this.selectedItem]);
     },
 
     /**
@@ -587,11 +588,15 @@
      * @return {null}
      */
     onSelect: function(item, val) {
-      if(this.settings.onSelect) {
+
+      if (val.value[0] && this.settings.markAsBold) {
+        val.value[0] = val.value[0].replace(/(<([^>]+)>)/ig,''); // strip html (strong from mark as bold )
+      }
+      if (this.settings.onSelect) {
         this.settings.onSelect.apply(this.field, [item, val]);
       }
       this.lastSearch = this.field.val();
-      if(this.settings.closeOnSelect) {
+      if (this.settings.closeOnSelect) {
         this.closeList();
       }
     }
@@ -601,7 +606,7 @@
 
   $.fn.tinyAutocomplete = function(settings) {
     return this.each(function() {
-      if(this.tinyAutocomplete) {
+      if (this.tinyAutocomplete) {
         // Prevent TinyAutocomplete from creating a new object. Instead,
         // just update the settings object
         $.extend(this.tinyAutocomplete.settings, settings);
