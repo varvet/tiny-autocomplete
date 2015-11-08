@@ -27,6 +27,7 @@
       grouped: false,
       queryProperty: 'q',
       queryParameters: {},
+      wildCard:'',
       method: 'get',
       scrollOnFocus: 'auto',
       maxItems: 100,
@@ -163,7 +164,7 @@
       this.field.trigger('beforerequest', [this, val]);
       var data = {};
       $.extend(data, this.settings.queryParameters);
-      data[this.settings.queryProperty] = val;
+      data[this.settings.queryProperty] = val+this.settings.wildCard;
       $.ajax(this.returnAjaxConf(data));
     },
 
