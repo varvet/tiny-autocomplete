@@ -279,9 +279,16 @@
      * @return {null}
      */
     prevItem: function() {
+      var listCount;
+
+      if(this.items.length>this.settings.maxItems){
+        listCount= this.settings.maxItems;
+      }     else {
+        listCount= this.items.length;
+      }
       this.selectedItem--;
       if (this.selectedItem < 0) {
-        var l = (this.settings.lastItemTemplate) ? this.items.length : this.items.length - 1;
+        var l = (this.settings.lastItemTemplate) ? listCount : listCount - 1;
         this.selectedItem = l;
       }
 
@@ -293,12 +300,20 @@
      * @return {null}
      */
     nextItem: function() {
+      var listCount;
+
+      if(this.items.length>this.settings.maxItems){
+        listCount= this.settings.maxItems;
+      }     else {
+        listCount= this.items.length;
+      }
+
       if (this.selectedItem == null) {
-        this.selectedItem = -1;
+       this.selectedItem = -1;
       }
       this.selectedItem++;
 
-      var l = (this.settings.lastItemTemplate) ? this.items.length : this.items.length - 1;
+      var l = (this.settings.lastItemTemplate) ? listCount : listCount - 1;
       if (this.selectedItem > l) {
         this.selectedItem = 0;
       }
