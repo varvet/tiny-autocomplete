@@ -18,7 +18,7 @@ Tiny Autocomplete also doesn't really assume it knows what your markup wants to 
 Note: while you can use Tiny Autocomplete with a local data source, the pattern matching implementation is pretty naïve. Intelligently searching through a result set and returning it is what servers do really well, so maybe that's what you want to do?
 
 ## Installation
-Just include tiny-autocomplete-0.x.js (development) or tiny-autocomplete-0.x-min.js (production) after Zepto or jQuery. Include tiny-autocomplete.css and you're good to go!
+Just include tiny-autocomplete.js after Zepto or jQuery. Include tiny-autocomplete.css and you're good to go!
 
 ## Demos
 There are some demos included. We should probably put up a server to host them but for now you can check them out via [http-server](https://www.npmjs.org/package/http-server) or something like that. Look at the HTML files to see what they're doing.
