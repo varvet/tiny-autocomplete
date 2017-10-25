@@ -21,6 +21,7 @@
   background:#fff;
   z-index:100;
   color:#222;
+  -webkit-overflow-scrolling: touch;
 }
 .autocomplete .autocomplete-group {
   position:relative;
