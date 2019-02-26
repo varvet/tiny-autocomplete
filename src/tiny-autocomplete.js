@@ -37,7 +37,8 @@
       groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
       itemTemplate: '<li class="autocomplete-item">{{title}}</li>',
       showNoResults: false,
-      noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>'
+      noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>', 
+      wrapClasses: "autocomplete"
     },
 
     /**
@@ -147,7 +148,7 @@
     setupMarkup: function() {
       this.field.addClass('autocomplete-field');
       this.field.attr('autocomplete', 'off');
-      this.field.wrap('<div class="autocomplete" />');
+      this.field.wrap('<div class="' + this.settings.wrapClasses + '" />');
       this.el = this.field.parent();
     },
 
