@@ -143,6 +143,12 @@ Change template for an item group, when using grouped view. Default is
 ```
 Make sure your `groupContentName` matches the ul class!
 
+#### wrapClasses:
+```javascript
+$('.autocomplete').tinyAutocomplete({ wrapClasses: 'autocomplete no-autoinit'});
+```
+To add classes to the list created by tinyAutocomplete, use wrapClasses.  The default is "autocomplete".  This is useful, for example, where using tinyAutocomplete with Materializecss which adds it's own formatting where it sees an autocomplete.  Adding the class no-autoinit will prevent materialize from doing this.
+
 
 #### groupContentName:
 ```javascript
