@@ -140,6 +140,8 @@
         $.proxy(this.onClickItem, this)
       );
 
+      this.el.on("blur", ".autocomplete-field", $.proxy(this.closeList, this));
+
       // Scroll to field if we're on a small device, we need that
       // screen real estate!
       if (this.settings.scrollOnFocus) {

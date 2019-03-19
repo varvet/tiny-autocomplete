@@ -2,12 +2,16 @@
   "name": "@varvet/tiny-autocomplete",
   "version": "1.0.0",
   "description": "A small and fast autocomplete plugin for Zepto and jQuery.",
-  "main": "index.js",
+  "main": "src/tiny-autocomplete.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:ci": "http-server -c-1 --silent",
+    "test:ci": "run-p --race start:ci test",
+    "test": "cypress run",
+    "test-dev": "cypress open",
+    "lint": "eslint src/tiny-autocomplete.js"
   },
   "repository": {
     "type": "git",
