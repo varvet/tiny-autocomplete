@@ -9,7 +9,7 @@
  * @return {object}         Self
  */
 (function(window, $) {
-  var TinyAutocomplete = function(el, options){
+  var TinyAutocomplete = function(el, options) {
     var that = this; // This is just to minify better
     that.field = $(el);
     that.el = null;
@@ -26,19 +26,21 @@
       minChars: 2,
       markAsBold: true,
       grouped: false,
-      queryProperty: 'q',
+      queryProperty: "q",
       queryParameters: {},
-      method: 'get',
-      scrollOnFocus: 'auto',
+      method: "get",
+      scrollOnFocus: "auto",
       maxItems: 100,
       keyboardDelay: 300,
       lastItemTemplate: null,
       closeOnSelect: true,
-      groupContentName: '.autocomplete-items',
-      groupTemplate: '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
+      groupContentName: ".autocomplete-items",
+      groupTemplate:
+        '<li class="autocomplete-group"><span class="autocomplete-group-header">{{title}}</span><ul class="autocomplete-items" /></li>',
       itemTemplate: '<li class="autocomplete-item">{{title}}</li>',
       showNoResults: false,
-      noResultsTemplate: '<li class="autocomplete-item">No results for {{title}}</li>', 
+      noResultsTemplate:
+        '<li class="autocomplete-item">No results for {{title}}</li>',
       wrapClasses: "autocomplete"
     },
 
@@ -64,7 +66,7 @@
      */
     template: function(template, vars) {
       return template.replace(/{{\s*[\w]+\s*}}/g, function(v) {
-        return vars[v.substr(2,v.length-4)];
+        return vars[v.substr(2, v.length - 4)];
       });
     },
 
@@ -78,7 +80,8 @@
     debounce: function(func, wait, immediate) {
       var timeout;
       return function() {
-        var context = this, args = arguments;
+        var context = this,
+          args = arguments;
         var later = function() {
           timeout = null;
           if (!immediate) func.apply(context, args);
@@ -96,27 +99,26 @@
      * @return {null}
      */
     setupSettings: function() {
-      if(this.settings.scrollOnFocus == 'auto') {
+      if (this.settings.scrollOnFocus == "auto") {
         this.settings.scrollOnFocus = this.isTouchDevice();
       }
 
       // We might be on a mobile device and have little in the way of
       // vertical real estate to work with. Cap it! This check needs a
       // bit more intelligence to it.
-      if($(window).height() < 500) {
-        this.settings.maxItems = Math.min( this.settings.maxItems, 3 );
+      if ($(window).height() < 500) {
+        this.settings.maxItems = Math.min(this.settings.maxItems, 3);
       }
 
       // Using local data or remote url?
-      if(this.settings.data) {
+      if (this.settings.data) {
         this.request = this.localRequest;
-      }
-      else {
+      } else {
         this.request = this.remoteRequest;
       }
 
       // Set the keyboard delay before search fires
-      if(this.settings.keyboardDelay != null) {
+      if (this.settings.keyboardDelay != null) {
         this.request = this.debounce(this.request, this.settings.keyboardDelay);
       }
     },
@@ -126,16 +128,24 @@
      * @return {null}
      */
     setupEvents: function() {
-      this.el.on('keyup', '.autocomplete-field', $.proxy(this.onKeyUp, this));
-      this.el.on('keydown', '.autocomplete-field', $.proxy(this.onKeyDown, this));
-      this.el.on('click', '.autocomplete-item', $.proxy(this.onClickItem, this));
+      this.el.on("keyup", ".autocomplete-field", $.proxy(this.onKeyUp, this));
+      this.el.on(
+        "keydown",
+        ".autocomplete-field",
+        $.proxy(this.onKeyDown, this)
+      );
+      this.el.on(
+        "click",
+        ".autocomplete-item",
+        $.proxy(this.onClickItem, this)
+      );
 
       // Scroll to field if we're on a small device, we need that
       // screen real estate!
-      if(this.settings.scrollOnFocus) {
-        this.field.on('focus', function() {
+      if (this.settings.scrollOnFocus) {
+        this.field.on("focus", function() {
           var h = $(this).offset().top;
-          setTimeout(function(){
+          setTimeout(function() {
             window.scrollTo(0, h);
           }, 0);
         });
@@ -147,8 +157,8 @@
      * @return {null}
      */
     setupMarkup: function() {
-      this.field.addClass('autocomplete-field');
-      this.field.attr('autocomplete', 'off');
+      this.field.addClass("autocomplete-field");
+      this.field.attr("autocomplete", "off");
       this.field.wrap('<div class="' + this.settings.wrapClasses + '" />');
       this.el = this.field.parent();
     },
@@ -159,14 +169,14 @@
      * @return {null}
      */
     remoteRequest: function(val) {
-      this.field.trigger('beforerequest', [this, val]);
+      this.field.trigger("beforerequest", [this, val]);
       var data = {};
       $.extend(data, this.settings.queryParameters);
       data[this.settings.queryProperty] = val;
       $.ajax({
         method: this.settings.method,
         url: this.settings.url,
-        dataType: 'json',
+        dataType: "json",
         data: data,
         success: $.proxy(this.beforeReceiveData, this)
       });
@@ -178,11 +188,10 @@
      * @return {null}
      */
     localRequest: function(val) {
-      if(this.settings.grouped) {
-        this.beforeReceiveData( this.matchLocalPatternGrouped(val) );
-      }
-      else {
-        this.beforeReceiveData( this.matchLocalPatternFlat(val) );
+      if (this.settings.grouped) {
+        this.beforeReceiveData(this.matchLocalPatternGrouped(val));
+      } else {
+        this.beforeReceiveData(this.matchLocalPatternFlat(val));
       }
     },
 
@@ -193,7 +202,7 @@
      * @return {array}      Array of hits
      */
     matchLocalPatternFlat: function(val) {
-      return this.matchArray( val, this.settings.data );
+      return this.matchArray(val, this.settings.data);
     },
 
     /**
@@ -205,13 +214,12 @@
     matchLocalPatternGrouped: function(val) {
       var r = $.extend(true, [], this.settings.data);
 
-      for(var i=0;i<r.length;i++) {
+      for (var i = 0; i < r.length; i++) {
         var a = this.matchArray(val, r[i].data);
-        if(a.length == 0) {
+        if (a.length == 0) {
           r.splice(i, 1);
           i--;
-        }
-        else {
+        } else {
           r[i].data = a;
         }
       }
@@ -227,10 +235,13 @@
      */
     matchArray: function(val, arr) {
       var r = [];
-      for(var i=0;i<arr.length;i++) {
-        for(var j in arr[i]) {
-          if( (arr[i][j].toLowerCase && arr[i][j].toLowerCase().indexOf( val.toLowerCase() ) > -1) ||
-              (arr[i][j] == val) ) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j in arr[i]) {
+          if (
+            (arr[i][j].toLowerCase &&
+              arr[i][j].toLowerCase().indexOf(val.toLowerCase()) > -1) ||
+            arr[i][j] == val
+          ) {
             r.push(arr[i]);
             break;
           }
@@ -246,11 +257,11 @@
      * @return {object}   DOM object
      */
     itemAt: function(i) {
-      if(i == null) {
+      if (i == null) {
         return $();
       }
 
-      return this.el.find('.autocomplete-item').eq(i);
+      return this.el.find(".autocomplete-item").eq(i);
     },
 
     /**
@@ -259,8 +270,14 @@
      * @return {number}   Item's id in array
      */
     clickedItemAt: function(o) {
-      for(var i=0;i<this.items.length;i++) {
-        if(o == this.el.find('.autocomplete-item').eq(i).get(0)) {
+      for (var i = 0; i < this.items.length; i++) {
+        if (
+          o ==
+          this.el
+            .find(".autocomplete-item")
+            .eq(i)
+            .get(0)
+        ) {
           return i;
         }
       }
@@ -273,11 +290,11 @@
      */
     prevItem: function() {
       this.selectedItem--;
-      if(this.selectedItem < 0) {
+      if (this.selectedItem < 0) {
         this.selectedItem = null;
       }
 
-      this.markSelected( this.selectedItem );
+      this.markSelected(this.selectedItem);
     },
 
     /**
@@ -285,17 +302,19 @@
      * @return {null}
      */
     nextItem: function() {
-      if(this.selectedItem == null) {
+      if (this.selectedItem == null) {
         this.selectedItem = -1;
       }
       this.selectedItem++;
 
-      var l = (this.settings.lastItemTemplate) ? this.items.length : this.items.length-1;
-      if(this.selectedItem >= l) {
+      var l = this.settings.lastItemTemplate
+        ? this.items.length
+        : this.items.length - 1;
+      if (this.selectedItem >= l) {
         this.selectedItem = l;
       }
 
-      this.markSelected( this.selectedItem );
+      this.markSelected(this.selectedItem);
     },
 
     /**
@@ -304,8 +323,8 @@
      * @return {null}
      */
     markSelected: function(i) {
-      this.el.find('.active').removeClass('active');
-      this.itemAt( i ).addClass('active');
+      this.el.find(".active").removeClass("active");
+      this.itemAt(i).addClass("active");
     },
 
     /**
@@ -317,17 +336,20 @@
      * @return {object}     Processed data object
      */
     markHitText: function(v, str) {
-      var words = str.split(' ');
-      for(var i in v) {
-        if(typeof(v[i]) == 'string' && i != 'template') {
+      var words = str.split(" ");
+      for (var i in v) {
+        if (typeof v[i] == "string" && i != "template") {
           var replacements = [str];
-          for(var j=0;j<words.length;j++) {
-            var word = words[j].trim().replace(/[^a-ö0-9]/gi,''); // Remove non-alphanumerics
-            if(word.length > 0) {
+          for (var j = 0; j < words.length; j++) {
+            var word = words[j].trim().replace(/[^a-ö0-9]/gi, ""); // Remove non-alphanumerics
+            if (word.length > 0) {
               replacements.push(word);
             }
           }
-          v[i] = v[i].replace( new RegExp("(" + replacements.join('|') + ")" , 'gi'), "<strong>$1</strong>" );
+          v[i] = v[i].replace(
+            new RegExp("(" + replacements.join("|") + ")", "gi"),
+            "<strong>$1</strong>"
+          );
         }
       }
       return v;
@@ -342,11 +364,16 @@
     renderGroups: function() {
       this.list.remove();
       this.list = $('<ul class="autocomplete-list" />');
-      for(var i in this.json) {
-        this.list.append( this.settings.templateMethod( this.settings.groupTemplate, this.json[i] ) );
+      for (var i in this.json) {
+        this.list.append(
+          this.settings.templateMethod(
+            this.settings.groupTemplate,
+            this.json[i]
+          )
+        );
       }
 
-      this.el.append( this.list );
+      this.el.append(this.list);
     },
 
     /**
@@ -356,15 +383,24 @@
      */
     renderItemsInGroups: function() {
       var v = this.field.val();
-      for(var i=0;i<this.json.length;i++) {
-        var group = this.el.find( this.settings.groupContentName ).eq(i);
-        for(var j=0;j<this.json[i].data.length && j<this.settings.maxItems;j++) {
+      for (var i = 0; i < this.json.length; i++) {
+        var group = this.el.find(this.settings.groupContentName).eq(i);
+        for (
+          var j = 0;
+          j < this.json[i].data.length && j < this.settings.maxItems;
+          j++
+        ) {
           var jsonData = $.extend({}, this.json[i].data[j]);
           // Strongify hits
-          if(this.settings.markAsBold) {
-            jsonData = this.markHitText( jsonData, v )
+          if (this.settings.markAsBold) {
+            jsonData = this.markHitText(jsonData, v);
           }
-          group.append( this.settings.templateMethod( this.json[i].template || this.settings.itemTemplate, jsonData ) );
+          group.append(
+            this.settings.templateMethod(
+              this.json[i].template || this.settings.itemTemplate,
+              jsonData
+            )
+          );
         }
       }
     },
@@ -377,15 +413,20 @@
       this.list.remove();
       this.list = $('<ul class="autocomplete-list" />');
       var v = this.field.val();
-      for(var i=0;i<this.json.length && i<this.settings.maxItems;i++) {
+      for (var i = 0; i < this.json.length && i < this.settings.maxItems; i++) {
         var jsonData = $.extend({}, this.json[i]);
         // Strongify hits
-        if(this.settings.markAsBold) {
-          jsonData = this.markHitText( jsonData, v )
+        if (this.settings.markAsBold) {
+          jsonData = this.markHitText(jsonData, v);
         }
-        this.list.append( this.settings.templateMethod( this.json[i].template || this.settings.itemTemplate, jsonData ) );
+        this.list.append(
+          this.settings.templateMethod(
+            this.json[i].template || this.settings.itemTemplate,
+            jsonData
+          )
+        );
       }
-      this.el.append( this.list );
+      this.el.append(this.list);
     },
 
     /**
@@ -394,7 +435,11 @@
      * @return {null}
      */
     renderLastItem: function() {
-      this.list.append( this.settings.templateMethod( this.settings.lastItemTemplate, {title: this.field.val()} ) );
+      this.list.append(
+        this.settings.templateMethod(this.settings.lastItemTemplate, {
+          title: this.field.val()
+        })
+      );
     },
 
     /**
@@ -403,7 +448,11 @@
      * @return {null}
      */
     renderNoResults: function() {
-      this.list.append( this.settings.templateMethod( this.settings.noResultsTemplate, {title: this.field.val()} ) );
+      this.list.append(
+        this.settings.templateMethod(this.settings.noResultsTemplate, {
+          title: this.field.val()
+        })
+      );
     },
 
     /**
@@ -411,7 +460,7 @@
      * @return {null}
      */
     closeList: function() {
-      $('html').off('click');
+      $("html").off("click");
       this.list.remove();
       this.selectedItem = null;
     },
@@ -423,9 +472,9 @@
      */
     getItemsFromGroups: function() {
       var r = [];
-      for(var i in this.json) {
-        for(var j=0;j<this.json[i].data.length;j++) {
-          if(j < this.settings.maxItems) {
+      for (var i in this.json) {
+        for (var j = 0; j < this.json[i].data.length; j++) {
+          if (j < this.settings.maxItems) {
             r.push(this.json[i].data[j]);
           }
         }
@@ -441,7 +490,7 @@
      * @return {boolean} True if value has changed since last request
      */
     valueHasChanged: function() {
-      if(this.field.val() != this.lastSearch) {
+      if (this.field.val() != this.lastSearch) {
         this.lastSearch = this.field.val();
         return true;
       }
@@ -456,7 +505,7 @@
      * @return {boolean} Whether or not this is a touch device
      */
     isTouchDevice: function() {
-      return !!('ontouchstart' in window);
+      return !!("ontouchstart" in window);
     },
 
     /**
@@ -468,7 +517,7 @@
      */
     beforeReceiveData: function(data, xhr) {
       this.json = data;
-      this.field.trigger('receivedata', [this, data, xhr]);
+      this.field.trigger("receivedata", [this, data, xhr]);
       this.onReceiveData(this.json);
     },
 
@@ -480,33 +529,32 @@
      */
     onReceiveData: function(data) {
       this.selectedItem = null;
-      if(this.settings.grouped) {
+      if (this.settings.grouped) {
         // First, render groups
         this.renderGroups();
 
         // Then, render the selectable items
         this.items = this.getItemsFromGroups();
         this.renderItemsInGroups();
-      }
-      else {
+      } else {
         this.items = this.json;
         this.renderItemsFlat();
       }
 
       // If no results, render no results message, if applicable
-      if(!this.items.length) {
-        if(this.settings.showNoResults) {
+      if (!this.items.length) {
+        if (this.settings.showNoResults) {
           this.renderNoResults();
         }
       }
 
       // Render last item, if applicable
-      if(this.settings.lastItemTemplate) {
+      if (this.settings.lastItemTemplate) {
         this.renderLastItem();
       }
 
       // Click outside should close the list
-      $('html').one('click', $.proxy(this.closeList, this));
+      $("html").one("click", $.proxy(this.closeList, this));
     },
 
     /**
@@ -516,11 +564,14 @@
      * @return {null}
      */
     onKeyUp: function(e) {
-      if(this.field.val().length >= this.settings.minChars && this.valueHasChanged()) {
-        this.request( this.field.val() );
+      if (
+        this.field.val().length >= this.settings.minChars &&
+        this.valueHasChanged()
+      ) {
+        this.request(this.field.val());
       }
-      if(this.field.val() == '') {
-        this.lastSearch = '';
+      if (this.field.val() == "") {
+        this.lastSearch = "";
         this.closeList();
       }
     },
@@ -531,18 +582,22 @@
      * @return {null}
      */
     onKeyDown: function(e) {
-      if(e.keyCode == 38) {  // Up
+      if (e.keyCode == 38) {
+        // Up
         e.preventDefault();
         this.prevItem();
       }
-      if(e.keyCode == 40) {  // Down
+      if (e.keyCode == 40) {
+        // Down
         e.preventDefault();
         this.nextItem();
       }
-      if(e.keyCode == 13) {  // Enter
+      if (e.keyCode == 13) {
+        // Enter
         this.onPressEnter(e);
       }
-      if(e.keyCode == 27) {  // Esc
+      if (e.keyCode == 27) {
+        // Esc
         e.preventDefault();
         this.closeList();
       }
@@ -565,12 +620,15 @@
     onPressEnter: function(e) {
       // If field is filled in but no item is selected, we don't block
       // submit
-      if(this.selectedItem === null) {
+      if (this.selectedItem === null) {
         return true;
       }
 
       e.preventDefault();
-      this.onSelect( this.itemAt( this.selectedItem ), this.items[this.selectedItem] );
+      this.onSelect(
+        this.itemAt(this.selectedItem),
+        this.items[this.selectedItem]
+      );
     },
 
     /**
@@ -581,11 +639,11 @@
      * @return {null}
      */
     onSelect: function(item, val) {
-      if(this.settings.onSelect) {
+      if (this.settings.onSelect) {
         this.settings.onSelect.apply(this.field, [item, val]);
       }
       this.lastSearch = this.field.val();
-      if(this.settings.closeOnSelect) {
+      if (this.settings.closeOnSelect) {
         this.closeList();
       }
     }
@@ -595,7 +653,7 @@
 
   $.fn.tinyAutocomplete = function(settings) {
     return this.each(function() {
-      if(this.tinyAutocomplete) {
+      if (this.tinyAutocomplete) {
         // Prevent TinyAutocomplete from creating a new object. Instead,
         // just update the settings object
         $.extend(this.tinyAutocomplete.settings, settings);
@@ -605,7 +663,7 @@
       var d = new TinyAutocomplete(this, settings).init();
 
       // Expose "tinyAutocomplete.settings" to the cold outside
-      this.tinyAutocomplete = {settings: d.settings};
+      this.tinyAutocomplete = { settings: d.settings };
     });
   };
 
