@@ -5,7 +5,7 @@
  * Contributions by Juha Tauriainen, https://github.com/JuhQ and
  * Phoebe Bright, https://github.com/phoebebright
  * License: http://johanhalse.mit-license.org
- * @version 0.4.7
+ * @version 1.0.0
  * @return {object}         Self
  */
 (function(window, $) {
@@ -124,7 +124,7 @@
     },
 
     /**
-     * Register initial mousedown callback
+     * Register initial callbacks
      * @return {null}
      */
     setupEvents: function() {
@@ -135,7 +135,7 @@
         $.proxy(this.onKeyDown, this)
       );
       this.el.on(
-        "click",
+        "mousedown",
         ".autocomplete-item",
         $.proxy(this.onClickItem, this)
       );
