@@ -106,7 +106,7 @@
       // We might be on a mobile device and have little in the way of
       // vertical real estate to work with. Cap it! This check needs a
       // bit more intelligence to it.
-      if ($(window).height() < 500) {
+      if (window.innerWidth < 700) {
         this.settings.maxItems = Math.min(this.settings.maxItems, 3);
       }
 
