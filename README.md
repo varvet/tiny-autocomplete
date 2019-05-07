@@ -25,7 +25,24 @@ Note: while you can use Tiny Autocomplete with a local data source, the pattern 
 
 ## Installation
 
-Just include tiny-autocomplete.js after Zepto or jQuery. Include tiny-autocomplete.css and you're good to go!
+### Global installation
+
+If you're not using any package managers, put tiny-autocomplete.js after Zepto or jQuery, include tiny-autocomplete.css, and you're good to go!
+
+### Installing through npm
+
+If you're using npm to manage your dependencies, first install the tiny-autocomplete module:
+
+```javascript
+npm install -s @varvet/tiny-autocomplete
+```
+
+Then require it in your files and activate it after your jQuery or Zepto library, like so:
+
+```javascript
+var $ = require("jquery");
+require("@varvet/tiny-autocomplete")($, window);
+```
 
 ## Demos
 
