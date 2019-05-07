@@ -1,0 +1,43 @@
+{
+  "name": "@varvet/tiny-autocomplete",
+  "version": "1.0.0",
+  "description": "A small and fast autocomplete plugin for Zepto and jQuery.",
+  "main": "src/tiny-autocomplete.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start:server": "http-server -c-1 --silent",
+    "test:ci": "cypress run",
+    "test:dev": "cypress open",
+    "test": "run-p --race start:server test:ci",
+    "test-dev": "run-p --race start:server test:dev",
+    "lint": "eslint src/tiny-autocomplete.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varvet/tiny-autocomplete.git"
+  },
+  "keywords": [
+    "jquery",
+    "zepto",
+    "autocomplete",
+    "plugin",
+    "extensible"
+  ],
+  "author": "Johan Halse, Varvet AB",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/varvet/tiny-autocomplete/issues"
+  },
+  "homepage": "https://github.com/varvet/tiny-autocomplete#readme",
+  "devDependencies": {
+    "cypress": "^3.2.0",
+    "eslint": "^5.15.3",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "http-server": "^0.11.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.16.4"
+  }
+}
