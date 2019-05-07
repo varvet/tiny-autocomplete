@@ -8,7 +8,8 @@
  * @version 1.0.0
  * @return {object}         Self
  */
-(function(window, $) {
+
+var factory = function($, window) {
   var TinyAutocomplete = function(el, options) {
     var that = this; // This is just to minify better
     that.field = $(el);
@@ -668,6 +669,10 @@
       this.tinyAutocomplete = { settings: d.settings };
     });
   };
+};
 
-  $.tinyAutocomplete = TinyAutocomplete;
-})(window, $);
+if (typeof exports !== "undefined") {
+  module.exports = factory;
+} else {
+  factory($, window);
+}

@@ -21,6 +21,11 @@
   "keywords": [
     "jquery",
     "zepto",
+    "search-as-you-type",
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "zepto-plugin",
+    "ecosystem:zepto",
     "autocomplete",
     "plugin",
     "extensible"
