@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/varvet/tiny-autocomplete.svg?branch=master)](https://travis-ci.org/varvet/tiny-autocomplete)
+
 # Tiny Autocomplete
 
 A small and snappy (2k minified+gzipped!) JavaScript autocomplete plugin for Zepto and jQuery.
