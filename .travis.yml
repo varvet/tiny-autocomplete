@@ -1,0 +1,4 @@
+language: node_js
+nvm:
+  - 10.15.3
+cache: npm

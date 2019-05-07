@@ -7,10 +7,11 @@
     "lib": "lib"
   },
   "scripts": {
-    "start:ci": "http-server -c-1 --silent",
-    "test:ci": "run-p --race start:ci test",
-    "test": "cypress run",
-    "test-dev": "cypress open",
+    "start:server": "http-server -c-1 --silent",
+    "test:ci": "cypress run",
+    "test:dev": "cypress open",
+    "test": "run-p --race start:server test:ci",
+    "test-dev": "run-p --race start:server test:dev",
     "lint": "eslint src/tiny-autocomplete.js"
   },
   "repository": {
