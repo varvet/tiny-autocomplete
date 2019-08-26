@@ -1,6 +1,6 @@
 {
   "name": "@varvet/tiny-autocomplete",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small and fast autocomplete plugin for Zepto and jQuery.",
   "main": "src/tiny-autocomplete.js",
   "directories": {
