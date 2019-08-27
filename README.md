@@ -257,7 +257,8 @@ Template for the "No results found" message. Will only be shown if `showNoResult
 $(".autocomplete").tinyAutocomplete({ maxItemsOnMobile: 5 });
 ```
 
-Limit the number of item when screen width is smaller than mobileWidth setting (which is by default 700px).
+Limit the number of items displayed when the screen width is smaller than the mobileWidth setting (which is by default 700px).
+See [mobileWidth](#mobilewidth).
 
 By default Tiny Autocomplete will set maxItemsOnMobile to **3**
 
