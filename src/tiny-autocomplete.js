@@ -32,6 +32,8 @@ var factory = function($, window) {
       method: "get",
       scrollOnFocus: "auto",
       maxItems: 100,
+      maxItemsOnMobile: 3,
+      mobileWidth: 700,
       keyboardDelay: 300,
       lastItemTemplate: null,
       closeOnSelect: true,
@@ -107,8 +109,9 @@ var factory = function($, window) {
       // We might be on a mobile device and have little in the way of
       // vertical real estate to work with. Cap it! This check needs a
       // bit more intelligence to it.
-      if (window.innerWidth < 700) {
-        this.settings.maxItems = Math.min(this.settings.maxItems, 3);
+      this.settings.maxItemsOnLarge = this.settings.maxItems;
+      if (window.innerWidth < this.settings.mobileWidth && this.settings.maxItemsOnMobile !== null) {
+        this.settings.maxItems = Math.min(this.settings.maxItems, this.settings.maxItemsOnMobile);
       }
 
       // Using local data or remote url?
@@ -142,6 +145,15 @@ var factory = function($, window) {
       );
 
       this.el.on("blur", ".autocomplete-field", $.proxy(this.closeList, this));
+
+      // Update maxItems when window size change
+      $(window).resize(this.debounce(() => {
+        if (window.innerWidth < this.settings.mobileWidth && this.settings.maxItemsOnMobile !== null) {
+          this.settings.maxItems = Math.min(this.settings.maxItems, this.settings.maxItemsOnMobile);
+        }else{
+          this.settings.maxItems = this.settings.maxItemsOnLarge;
+        }
+      }, 250));
 
       // Scroll to field if we're on a small device, we need that
       // screen real estate!
