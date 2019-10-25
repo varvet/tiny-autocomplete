@@ -110,8 +110,14 @@ var factory = function($, window) {
       // vertical real estate to work with. Cap it! This check needs a
       // bit more intelligence to it.
       this.settings.maxItemsOnLarge = this.settings.maxItems;
-      if (window.innerWidth < this.settings.mobileWidth && this.settings.maxItemsOnMobile !== null) {
-        this.settings.maxItems = Math.min(this.settings.maxItems, this.settings.maxItemsOnMobile);
+      if (
+        window.innerWidth < this.settings.mobileWidth &&
+        this.settings.maxItemsOnMobile !== null
+      ) {
+        this.settings.maxItems = Math.min(
+          this.settings.maxItems,
+          this.settings.maxItemsOnMobile
+        );
       }
 
       // Using local data or remote url?
@@ -147,13 +153,21 @@ var factory = function($, window) {
       this.el.on("blur", ".autocomplete-field", $.proxy(this.closeList, this));
 
       // Update maxItems when window size change
-      $(window).resize(this.debounce(() => {
-        if (window.innerWidth < this.settings.mobileWidth && this.settings.maxItemsOnMobile !== null) {
-          this.settings.maxItems = Math.min(this.settings.maxItems, this.settings.maxItemsOnMobile);
-        }else{
-          this.settings.maxItems = this.settings.maxItemsOnLarge;
-        }
-      }, 250));
+      $(window).resize(
+        this.debounce(() => {
+          if (
+            window.innerWidth < this.settings.mobileWidth &&
+            this.settings.maxItemsOnMobile !== null
+          ) {
+            this.settings.maxItems = Math.min(
+              this.settings.maxItems,
+              this.settings.maxItemsOnMobile
+            );
+          } else {
+            this.settings.maxItems = this.settings.maxItemsOnLarge;
+          }
+        }, 250)
+      );
 
       // Scroll to field if we're on a small device, we need that
       // screen real estate!

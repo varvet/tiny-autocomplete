@@ -253,6 +253,7 @@ $(".autocomplete").tinyAutocomplete({
 Template for the "No results found" message. Will only be shown if `showNoResults` option is enabled. Uses same templating engine as the other templates.
 
 #### maxItemsOnMobile
+
 ```javascript
 $(".autocomplete").tinyAutocomplete({ maxItemsOnMobile: 5 });
 ```
@@ -263,6 +264,7 @@ See [mobileWidth](#mobilewidth).
 By default Tiny Autocomplete will set maxItemsOnMobile to **3**
 
 #### mobileWidth
+
 ```javascript
 $(".autocomplete").tinyAutocomplete({ mobileWidth: 500 });
 ```
@@ -270,7 +272,6 @@ $(".autocomplete").tinyAutocomplete({ mobileWidth: 500 });
 See [maxItemsOnMobile](#maxitemsonmobile)
 
 By default Tiny Autocomplete will set mobileWidth to **700**
-
 
 ### Global defaults
 
