@@ -151,20 +151,20 @@ var factory = function($, window) {
       );
 
       this.el.on("blur", ".autocomplete-field", $.proxy(this.closeList, this));
-
+      var self = this;
       // Update maxItems when window size change
       $(window).resize(
-        this.debounce(() => {
+        this.debounce(function() {
           if (
-            window.innerWidth < this.settings.mobileWidth &&
-            this.settings.maxItemsOnMobile !== null
+            window.innerWidth < self.settings.mobileWidth &&
+            self.settings.maxItemsOnMobile !== null
           ) {
-            this.settings.maxItems = Math.min(
-              this.settings.maxItems,
-              this.settings.maxItemsOnMobile
+            self.settings.maxItems = Math.min(
+              self.settings.maxItems,
+              self.settings.maxItemsOnMobile
             );
           } else {
-            this.settings.maxItems = this.settings.maxItemsOnLarge;
+            self.settings.maxItems = self.settings.maxItemsOnLarge;
           }
         }, 250)
       );
