@@ -197,18 +197,20 @@ var factory = function($, window) {
      * @param  {string} val Value to search for
      * @return {null}
      */
-    remoteRequest: function(val) {
-      this.field.trigger("beforerequest", [this, val]);
-      var data = {};
-      $.extend(data, this.settings.queryParameters);
-      data[this.settings.queryProperty] = val;
-      $.ajax({
-        method: this.settings.method,
-        url: this.settings.url,
-        dataType: "json",
-        data: data,
-        success: $.proxy(this.beforeReceiveData, this)
-      });
+    remoteRequest: function (val) {
+        var self = this;
+        this.field.trigger("beforerequest", [this, val]);
+        var data = {};
+        $.extend(data, this.settings.queryParameters);
+        data[this.settings.queryProperty] = val;
+        $.ajax({
+            method: this.settings.method,
+            url: this.settings.url,
+            dataType: "json",
+            data: data,
+            success: $.proxy(this.beforeReceiveData, this),
+            error: function () { self.field.trigger("requestfailed", [self, val]); }
+        });
     },
 
     /**
