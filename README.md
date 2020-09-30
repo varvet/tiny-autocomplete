@@ -293,7 +293,7 @@ TinyAutocomplete won't instantiate again, it will just change the settings on th
 
 ## Events
 
-Tiny Autocomplete fires some events for you to hook into. The only ones implemented right now are `beforerequest` and `receivedata`. You can use them to maybe show a spinner somewhere else or something like that, but the `receivedata` event is useful for massaging the data you get back from your server, too. If your json is structured a little differently than expected, perhaps something like this:
+Tiny Autocomplete fires some events for you to hook into. The only ones implemented right now are `beforerequest`, `requestfailed` and `receivedata`. You can use them to maybe show a spinner somewhere else or something like that, but the `receivedata` event is useful for massaging the data you get back from your server, too. If your json is structured a little differently than expected, perhaps something like this:
 
 ```javascript
 {
@@ -324,6 +324,8 @@ $(".field")
     tinyAutocomplete.json = json.stuff.data;
   });
 ```
+
+You can also hook into the `requestfailed` event if you for example wants to  notify the user that an error has occured.
 
 ## License
 
